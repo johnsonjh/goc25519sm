@@ -1,5 +1,15 @@
-Copyright (c) 2009 The Go Authors. All rights reserved.
-Copyright (c) 2020 Jeffrey H. Johnson
+Copyright 2020 Jeffrey H. Johnson.
+Copyright 2020 Gridfinity, LLC.
+Copyright 2020 Frank Denis <j at pureftpd dot org>.
+Copyright 2019 The Go Authors.
+Copyright 2015 Google, Inc.
+Copyright 2011 The OpenSSL Project.
+Copyright 1998 Eric Young (eay@cryptsoft.com).
+
+This product includes software developed by the OpenSSL Project
+for use in the OpenSSL Toolkit (http://www.openssl.org/).
+
+All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -7,11 +17,13 @@ met:
 
    * Redistributions of source code must retain the above copyright
 notice, this list of conditions and the following disclaimer.
+
    * Redistributions in binary form must reproduce the above
 copyright notice, this list of conditions and the following disclaimer
 in the documentation and/or other materials provided with the
 distribution.
-   * Neither the name of Google Inc. nor the names of its
+
+   * Neither the name of Google, Inc. nor the names of its
 contributors may be used to endorse or promote products derived from
 this software without specific prior written permission.
 
