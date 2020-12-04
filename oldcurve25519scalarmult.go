@@ -5,7 +5,7 @@
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-// Package OldCurve25518ScalarMult contains a non-deprecated, mostly
+// Package OldCurve25519ScalarMult contains a non-deprecated, mostly
 // backwards-compatible implemention of ScalarBaseMult and ScalarMult
 // (as OldScalarBaseMult and ScalarMult), with validation and error
 // checking, provided as an alternative to the Go X2559 function.
