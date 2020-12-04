@@ -43,11 +43,7 @@ func OldScalarBaseMult(dst, scalar *[X25519Size]byte) error {
 }
 
 // oldScalarMultVerify performs validation of the input and output
-func oldScalarMultVerify(
-	dst *[X25519Size]byte,
-	scalar *[X25519Size]byte,
-	point *[X25519Size]byte,
-) error {
+func oldScalarMultVerify(dst, scalar, point *[X25519Size]byte) error {
 	// Check for bad scalar length input
 	if l := len(scalar); l != X25519Size {
 		return fmt.Errorf(
