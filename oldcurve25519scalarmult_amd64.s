@@ -1,11 +1,13 @@
-// Copyright 2012 The Go Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
+// Copyright 2012 The Go Authors.
+// All rights reserved.
+// Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-// This code was translated into a form compatible with 6a from the public
-// domain sources in SUPERCOP: https://bench.cr.yp.to/supercop.html
+// This code was translated into a form compatible with
+// 6a from the public domain sources in SUPERCOP:
+// https://bench.cr.yp.to/supercop.html
 
-// +build amd64,!gccgo,!appengine,!purego
+// +build amd64,gc,!purego
 
 #define REDMASK51     0x0007FFFFFFFFFFFF
 

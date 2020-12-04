@@ -1,5 +1,8 @@
-// Copyright 2013 The Go Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
+// Copyright 2020 Jeffrey H. Johnson.
+// Copyright 2020 Gridfinity, LLC.
+// Copyright 2013 The Go Authors.
+// All rights reserved.
+// Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
 package OldCurve25519ScalarMult
@@ -7,12 +10,12 @@ package OldCurve25519ScalarMult
 import "encoding/binary"
 
 // This code is a port of the public domain, "ref10" implementation of
-// curve25519 from SUPERCOP 20130419 by D. J. Bernstein.
+// Curve25519 from SUPERCOP 20130419 by D. J. Bernstein.
 
-// fieldElement represents an element of the field GF(2^255 - 19). An element
-// t, entries t[0]...t[9], represents the integer t[0]+2^26 t[1]+2^51 t[2]+2^77
-// t[3]+2^102 t[4]+...+2^230 t[9]. Bounds on each t[i] vary depending on
-// context.
+// fieldElement represents an element of the field GF(2^255 - 19).
+// An element t, entries t[0]...t[9], represents the integer
+// t[0]+2^26 t[1]+2^51 t[2]+2^77 t[3]+2^102 t[4]+...+2^230 t[9].
+// Bounds on each t[i] vary depending on context.
 type fieldElement [10]int32
 
 func feZero(fe *fieldElement) {
@@ -44,8 +47,8 @@ func feCopy(dst, src *fieldElement) {
 	}
 }
 
-// feCSwap replaces (f,g) with (g,f) if b == 1; replaces (f,g) with (f,g) if b == 0.
-//
+// feCSwap replaces (f,g) with (g,f) if b == 1;
+// replaces (f,g) with (f,g) if b == 0.
 // Preconditions: b in {0,1}.
 func feCSwap(f, g *fieldElement, b int32) {
 	b = -b
@@ -70,7 +73,7 @@ func load4(in []byte) int64 {
 	return int64(binary.LittleEndian.Uint32(in))
 }
 
-func feFromBytes(dst *fieldElement, src *[32]byte) {
+func feFromBytes(dst *fieldElement, src *[X25519Size]byte) {
 	h0 := load4(src[:])
 	h1 := load3(src[4:]) << 6
 	h2 := load3(src[7:]) << 5
@@ -81,7 +84,6 @@ func feFromBytes(dst *fieldElement, src *[32]byte) {
 	h7 := load3(src[23:]) << 5
 	h8 := load3(src[26:]) << 4
 	h9 := (load3(src[29:]) & 0x7fffff) << 2
-
 	var carry [10]int64
 	carry[9] = (h9 + 1<<24) >> 25
 	h0 += carry[9] * 19
@@ -98,7 +100,6 @@ func feFromBytes(dst *fieldElement, src *[32]byte) {
 	carry[7] = (h7 + 1<<24) >> 25
 	h8 += carry[7]
 	h7 -= carry[7] << 25
-
 	carry[0] = (h0 + 1<<25) >> 26
 	h1 += carry[0]
 	h0 -= carry[0] << 26
@@ -114,7 +115,6 @@ func feFromBytes(dst *fieldElement, src *[32]byte) {
 	carry[8] = (h8 + 1<<25) >> 26
 	h9 += carry[8]
 	h8 -= carry[8] << 26
-
 	dst[0] = int32(h0)
 	dst[1] = int32(h1)
 	dst[2] = int32(h2)
@@ -129,30 +129,24 @@ func feFromBytes(dst *fieldElement, src *[32]byte) {
 
 // feToBytes marshals h to s.
 // Preconditions:
-//   |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
-//
+//   |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24, etc.
 // Write p=2^255-19; q=floor(h/p).
-// Basic claim: q = floor(2^(-255)(h + 19 2^(-25)h9 + 2^(-1))).
-//
+// Basic Claim:
+//   q = floor(2^(-255)(h + 19 2^(-25)h9 + 2^(-1))).
 // Proof:
 //   Have |h|<=p so |q|<=1 so |19^2 2^(-255) q|<1/4.
 //   Also have |h-2^230 h9|<2^230 so |19 2^(-255)(h-2^230 h9)|<1/4.
-//
 //   Write y=2^(-1)-19^2 2^(-255)q-19 2^(-255)(h-2^230 h9).
 //   Then 0<y<1.
-//
 //   Write r=h-pq.
 //   Have 0<=r<=p-1=2^255-20.
 //   Thus 0<=r+19(2^-255)r<r+19(2^-255)2^255<=2^255-1.
-//
 //   Write x=r+19(2^-255)r+y.
 //   Then 0<x<2^255 so floor(2^(-255)x) = 0 so floor(q+2^(-255)x) = q.
-//
 //   Have q+2^(-255)x = 2^(-255)(h + 19 2^(-25) h9 + 2^(-1))
-//   so floor(2^(-255)(h + 19 2^(-25) h9 + 2^(-1))) = q.
-func feToBytes(s *[32]byte, h *fieldElement) {
+//   So floor(2^(-255)(h + 19 2^(-25) h9 + 2^(-1))) = q.
+func feToBytes(s *[X25519Size]byte, h *fieldElement) {
 	var carry [10]int32
-
 	q := (19*h[9] + (1 << 24)) >> 25
 	q = (h[0] + q) >> 26
 	q = (h[1] + q) >> 25
@@ -164,11 +158,11 @@ func feToBytes(s *[32]byte, h *fieldElement) {
 	q = (h[7] + q) >> 25
 	q = (h[8] + q) >> 26
 	q = (h[9] + q) >> 25
-
-	// Goal: Output h-(2^255-19)q, which is between 0 and 2^255-20.
+	// Goal: Output h-(2^255-19)q,
+	// which is between 0 and 2^255-20.
 	h[0] += 19 * q
-	// Goal: Output h-2^255 q, which is between 0 and 2^255-20.
-
+	// Goal: Output h-2^255 q,
+	// which is between 0 and 2^255-20.
 	carry[0] = h[0] >> 26
 	h[1] += carry[0]
 	h[0] -= carry[0] << 26
@@ -199,12 +193,11 @@ func feToBytes(s *[32]byte, h *fieldElement) {
 	carry[9] = h[9] >> 25
 	h[9] -= carry[9] << 25
 	// h10 = carry9
-
-	// Goal: Output h[0]+...+2^255 h10-2^255 q, which is between 0 and 2^255-20.
+	// Goal: Output h[0]+...+2^255 h10-2^255 q,
+	// which is between 0 and 2^255-20.
 	// Have h[0]+...+2^230 h[9] between 0 and 2^255-1;
 	// evidently 2^255 h10-2^255 q = 0.
 	// Goal: Output h[0]+...+2^230 h[9].
-
 	s[0] = byte(h[0] >> 0)
 	s[1] = byte(h[0] >> 8)
 	s[2] = byte(h[0] >> 16)
@@ -241,31 +234,23 @@ func feToBytes(s *[32]byte, h *fieldElement) {
 
 // feMul calculates h = f * g
 // Can overlap h with f or g.
-//
 // Preconditions:
 //    |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
 //    |g| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
-//
 // Postconditions:
 //    |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
-//
 // Notes on implementation strategy:
-//
-// Using schoolbook multiplication.
-// Karatsuba would save a little in some cost models.
-//
-// Most multiplications by 2 and 19 are 32-bit precomputations;
-// cheaper than 64-bit postcomputations.
-//
-// There is one remaining multiplication by 19 in the carry chain;
-// one *19 precomputation can be merged into this,
-// but the resulting data flow is considerably less clean.
-//
-// There are 12 carries below.
-// 10 of them are 2-way parallelizable and vectorizable.
-// Can get away with 11 carries, but then data flow is much deeper.
-//
-// With tighter constraints on inputs can squeeze carries into int32.
+// * Using schoolbook multiplication.
+// * Karatsuba would save a little in some cost models.
+// * Most multiplications by 2 and 19 are 32-bit precomputations;
+//   cheaper than 64-bit postcomputations.
+// * There is one remaining multiplication by 19 in the carry chain;
+//   one *19 precomputation can be merged into this, but the resulting
+//   data flow is considerably less clean.
+// * There are 12 carries below. 10 of them are 2-way parallelizable
+//   and vectorizable. Can get away with 11 carries, but then data
+//   flow is much deeper.
+// * With tighter constraints on inputs, can squeeze carries into int32.
 func feMul(h, f, g *fieldElement) {
 	f0 := f[0]
 	f1 := f[1]
@@ -412,12 +397,10 @@ func feMul(h, f, g *fieldElement) {
 	h8 := f0g8 + f1g7_2 + f2g6 + f3g5_2 + f4g4 + f5g3_2 + f6g2 + f7g1_2 + f8g0 + f9g9_38
 	h9 := f0g9 + f1g8 + f2g7 + f3g6 + f4g5 + f5g4 + f6g3 + f7g2 + f8g1 + f9g0
 	var carry [10]int64
-
 	// |h0| <= (1.1*1.1*2^52*(1+19+19+19+19)+1.1*1.1*2^50*(38+38+38+38+38))
 	//   i.e. |h0| <= 1.2*2^59; narrower ranges for h2, h4, h6, h8
 	// |h1| <= (1.1*1.1*2^51*(1+1+19+19+19+19+19+19+19+19))
 	//   i.e. |h1| <= 1.5*2^58; narrower ranges for h3, h5, h7, h9
-
 	carry[0] = (h0 + (1 << 25)) >> 26
 	h1 += carry[0]
 	h0 -= carry[0] << 26
@@ -428,7 +411,6 @@ func feMul(h, f, g *fieldElement) {
 	// |h4| <= 2^25
 	// |h1| <= 1.51*2^58
 	// |h5| <= 1.51*2^58
-
 	carry[1] = (h1 + (1 << 24)) >> 25
 	h2 += carry[1]
 	h1 -= carry[1] << 25
@@ -439,7 +421,6 @@ func feMul(h, f, g *fieldElement) {
 	// |h5| <= 2^24; from now on fits into int32
 	// |h2| <= 1.21*2^59
 	// |h6| <= 1.21*2^59
-
 	carry[2] = (h2 + (1 << 25)) >> 26
 	h3 += carry[2]
 	h2 -= carry[2] << 26
@@ -450,7 +431,6 @@ func feMul(h, f, g *fieldElement) {
 	// |h6| <= 2^25; from now on fits into int32 unchanged
 	// |h3| <= 1.51*2^58
 	// |h7| <= 1.51*2^58
-
 	carry[3] = (h3 + (1 << 24)) >> 25
 	h4 += carry[3]
 	h3 -= carry[3] << 25
@@ -461,7 +441,6 @@ func feMul(h, f, g *fieldElement) {
 	// |h7| <= 2^24; from now on fits into int32 unchanged
 	// |h4| <= 1.52*2^33
 	// |h8| <= 1.52*2^33
-
 	carry[4] = (h4 + (1 << 25)) >> 26
 	h5 += carry[4]
 	h4 -= carry[4] << 26
@@ -472,19 +451,16 @@ func feMul(h, f, g *fieldElement) {
 	// |h8| <= 2^25; from now on fits into int32 unchanged
 	// |h5| <= 1.01*2^24
 	// |h9| <= 1.51*2^58
-
 	carry[9] = (h9 + (1 << 24)) >> 25
 	h0 += carry[9] * 19
 	h9 -= carry[9] << 25
 	// |h9| <= 2^24; from now on fits into int32 unchanged
 	// |h0| <= 1.8*2^37
-
 	carry[0] = (h0 + (1 << 25)) >> 26
 	h1 += carry[0]
 	h0 -= carry[0] << 26
 	// |h0| <= 2^25; from now on fits into int32 unchanged
 	// |h1| <= 1.01*2^24
-
 	h[0] = int32(h0)
 	h[1] = int32(h1)
 	h[2] = int32(h2)
@@ -498,10 +474,8 @@ func feMul(h, f, g *fieldElement) {
 }
 
 // feSquare calculates h = f*f. Can overlap h with f.
-//
 // Preconditions:
 //    |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
-//
 // Postconditions:
 //    |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 func feSquare(h, f *fieldElement) {
@@ -594,50 +568,42 @@ func feSquare(h, f *fieldElement) {
 	h8 := f0f8_2 + f1f7_4 + f2f6_2 + f3f5_4 + f4f4 + f9f9_38
 	h9 := f0f9_2 + f1f8_2 + f2f7_2 + f3f6_2 + f4f5_2
 	var carry [10]int64
-
 	carry[0] = (h0 + (1 << 25)) >> 26
 	h1 += carry[0]
 	h0 -= carry[0] << 26
 	carry[4] = (h4 + (1 << 25)) >> 26
 	h5 += carry[4]
 	h4 -= carry[4] << 26
-
 	carry[1] = (h1 + (1 << 24)) >> 25
 	h2 += carry[1]
 	h1 -= carry[1] << 25
 	carry[5] = (h5 + (1 << 24)) >> 25
 	h6 += carry[5]
 	h5 -= carry[5] << 25
-
 	carry[2] = (h2 + (1 << 25)) >> 26
 	h3 += carry[2]
 	h2 -= carry[2] << 26
 	carry[6] = (h6 + (1 << 25)) >> 26
 	h7 += carry[6]
 	h6 -= carry[6] << 26
-
 	carry[3] = (h3 + (1 << 24)) >> 25
 	h4 += carry[3]
 	h3 -= carry[3] << 25
 	carry[7] = (h7 + (1 << 24)) >> 25
 	h8 += carry[7]
 	h7 -= carry[7] << 25
-
 	carry[4] = (h4 + (1 << 25)) >> 26
 	h5 += carry[4]
 	h4 -= carry[4] << 26
 	carry[8] = (h8 + (1 << 25)) >> 26
 	h9 += carry[8]
 	h8 -= carry[8] << 26
-
 	carry[9] = (h9 + (1 << 24)) >> 25
 	h0 += carry[9] * 19
 	h9 -= carry[9] << 25
-
 	carry[0] = (h0 + (1 << 25)) >> 26
 	h1 += carry[0]
 	h0 -= carry[0] << 26
-
 	h[0] = int32(h0)
 	h[1] = int32(h1)
 	h[2] = int32(h2)
@@ -651,10 +617,8 @@ func feSquare(h, f *fieldElement) {
 }
 
 // feMul121666 calculates h = f * 121666. Can overlap h with f.
-//
 // Preconditions:
 //    |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
-//
 // Postconditions:
 //    |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 func feMul121666(h, f *fieldElement) {
@@ -669,7 +633,6 @@ func feMul121666(h, f *fieldElement) {
 	h8 := int64(f[8]) * 121666
 	h9 := int64(f[9]) * 121666
 	var carry [10]int64
-
 	carry[9] = (h9 + (1 << 24)) >> 25
 	h0 += carry[9] * 19
 	h9 -= carry[9] << 25
@@ -685,7 +648,6 @@ func feMul121666(h, f *fieldElement) {
 	carry[7] = (h7 + (1 << 24)) >> 25
 	h8 += carry[7]
 	h7 -= carry[7] << 25
-
 	carry[0] = (h0 + (1 << 25)) >> 26
 	h1 += carry[0]
 	h0 -= carry[0] << 26
@@ -701,7 +663,6 @@ func feMul121666(h, f *fieldElement) {
 	carry[8] = (h8 + (1 << 25)) >> 26
 	h9 += carry[8]
 	h8 -= carry[8] << 26
-
 	h[0] = int32(h0)
 	h[1] = int32(h1)
 	h[2] = int32(h2)
@@ -718,7 +679,6 @@ func feMul121666(h, f *fieldElement) {
 func feInvert(out, z *fieldElement) {
 	var t0, t1, t2, t3 fieldElement
 	var i int
-
 	feSquare(&t0, z)
 	for i = 1; i < 1; i++ {
 		feSquare(&t0, &t0)
@@ -776,20 +736,17 @@ func feInvert(out, z *fieldElement) {
 	feMul(out, &t1, &t0)
 }
 
-func oldScalarMultGeneric(out, in, base *[32]byte) {
-	var e [32]byte
-
+func oldScalarMultGeneric(out, in, base *[X25519Size]byte) error {
+	var e [X25519Size]byte
 	copy(e[:], in[:])
 	e[0] &= 248
 	e[31] &= 127
 	e[31] |= 64
-
 	var x1, x2, z2, x3, z3, tmp0, tmp1 fieldElement
 	feFromBytes(&x1, base)
 	feOne(&x2)
 	feCopy(&x3, &x1)
 	feOne(&z3)
-
 	swap := int32(0)
 	for pos := 254; pos >= 0; pos-- {
 		b := e[pos/8] >> uint(pos&7)
@@ -798,7 +755,6 @@ func oldScalarMultGeneric(out, in, base *[32]byte) {
 		feCSwap(&x2, &x3, swap)
 		feCSwap(&z2, &z3, swap)
 		swap = int32(b)
-
 		feSub(&tmp0, &x3, &z3)
 		feSub(&tmp1, &x2, &z2)
 		feAdd(&x2, &x2, &z2)
@@ -818,11 +774,10 @@ func oldScalarMultGeneric(out, in, base *[32]byte) {
 		feMul(&z3, &x1, &z2)
 		feMul(&z2, &tmp1, &tmp0)
 	}
-
 	feCSwap(&x2, &x3, swap)
 	feCSwap(&z2, &z3, swap)
-
 	feInvert(&z2, &z2)
 	feMul(&x2, &x2, &z2)
 	feToBytes(out, &x2)
+	return nil
 }
