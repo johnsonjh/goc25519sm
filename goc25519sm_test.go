@@ -6,7 +6,7 @@
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-package OldCurve25519ScalarMult
+package goc25519sm
 
 import (
 	"bytes"
@@ -123,7 +123,7 @@ func TestHighBitIgnored(t *testing.T) {
 	err = OldScalarMult(&hi0, &s, &u)
 	if err != nil {
 		t.Errorf(
-			"OldCurve25519ScalarMult.TestHighBitIgnored.OldScalarMult failure: %v",
+			"goc25519sm.TestHighBitIgnored.OldScalarMult failure: %v",
 			err,
 		)
 	}
@@ -131,13 +131,13 @@ func TestHighBitIgnored(t *testing.T) {
 	err = OldScalarMult(&hi1, &s, &u)
 	if err != nil {
 		t.Errorf(
-			"OldCurve25519ScalarMult.TestHighBitIgnored.OldScalarMult faulure: %v",
+			"goc25519sm.TestHighBitIgnored.OldScalarMult faulure: %v",
 			err,
 		)
 	}
 	if !bytes.Equal(hi0[:], hi1[:]) {
 		t.Errorf(
-			"OldCurve25519ScalarMult.TestHighBitIgnored failure: high bit of group point affecting result",
+			"goc25519sm.TestHighBitIgnored failure: high bit of group point affecting result",
 		)
 	}
 }
@@ -152,14 +152,14 @@ func TestOldScalarBaseMult1024(t *testing.T) {
 		err = OldScalarBaseMult(&csk[(i&1)^1], &csk[i&1])
 		if err != nil {
 			t.Errorf(
-				"OldCurve25519ScalarMult.TestOldScalarBaseMult1024.OldScalarBaseMult failure: %v",
+				"goc25519sm.TestOldScalarBaseMult1024.OldScalarBaseMult failure: %v",
 				err,
 			)
 		}
 	}
 	if !bytes.Equal(curved25519Expected[:], csk[0][:]) {
 		t.Fatal(
-			"OldCurve25519ScalarMult.TestOldScalarBaseMult1024 failure: ((|255| * basepoint) * basepoint)... 1024 did not match",
+			"goc25519sm.TestOldScalarBaseMult1024 failure: ((|255| * basepoint) * basepoint)... 1024 did not match",
 		)
 	}
 }
@@ -171,7 +171,7 @@ func TestBasepointMolestation(t *testing.T) {
 	if err != nil {
 		t.Fatal(
 			fmt.Sprintf(
-				"OldCurve25519ScalarMult.TestBasepointMolestation.oldScalarVerifyBasepoint failure: falsely detected molestation of pristine Basepoint: got %v, wanted %v",
+				"goc25519sm.TestBasepointMolestation.oldScalarVerifyBasepoint failure: falsely detected molestation of pristine Basepoint: got %v, wanted %v",
 				err,
 				Basepoint,
 			),
@@ -188,7 +188,7 @@ func TestBasepointMolestation(t *testing.T) {
 	if err == nil {
 		t.Fatal(
 			fmt.Sprintf(
-				"OldCurve25519ScalarMult.TestBasepointMolestation.oldScalarVerifyBasepoint failure: failed to detect Basepoint molestation: got %v, wanted %v",
+				"goc25519sm.TestBasepointMolestation.oldScalarVerifyBasepoint failure: failed to detect Basepoint molestation: got %v, wanted %v",
 				Basepoint,
 				oBasepoint,
 			),
@@ -206,7 +206,7 @@ func TestOldScalarBaseMult200(t *testing.T) {
 		err := OldScalarBaseMult(out, in)
 		if err != nil {
 			t.Fatal(
-				fmt.Sprintf("OldCurve25519ScalarMult.TestOldScalarBaseMult200.OldScalarBaseMult failure: %v",
+				fmt.Sprintf("goc25519sm.TestOldScalarBaseMult200.OldScalarBaseMult failure: %v",
 					err,
 				),
 			)
@@ -216,7 +216,7 @@ func TestOldScalarBaseMult200(t *testing.T) {
 	result := fmt.Sprintf("%x", in[:])
 	if result != expectedHex {
 		t.Errorf(
-			"OldCurve25519ScalarMult.TestOldScalarBaseMult200 failure: incorrect result: got %s, want %s",
+			"goc25519sm.TestOldScalarBaseMult200 failure: incorrect result: got %s, want %s",
 			result,
 			expectedHex,
 		)
@@ -232,7 +232,7 @@ func TestLowOrderPoints(t *testing.T) {
 	if _, err := crand.Read(tscalar); err != nil {
 		t.Fatal(
 			fmt.Sprintf(
-				"OldCurve25519ScalarMult.TestLowOrderPoints failure: crand.Read failure: %v",
+				"goc25519sm.TestLowOrderPoints failure: crand.Read failure: %v",
 				err,
 			),
 		)
@@ -242,14 +242,14 @@ func TestLowOrderPoints(t *testing.T) {
 		err := OldScalarMult(&out, &x, &p)
 		if err == nil {
 			t.Errorf(
-				"OldCurve25519ScalarMult.TestLowOrderPoints.OldScalarMult failure: %d: expected error, got nil",
+				"goc25519sm.TestLowOrderPoints.OldScalarMult failure: %d: expected error, got nil",
 				i,
 			)
 		}
 		var allZeroOutput [X25519Size]byte
 		if out != allZeroOutput {
 			t.Errorf(
-				"OldCurve25519ScalarMult.TestLowOrderPoints.OldScalarMult failure: %d: expected all zero output, got %x",
+				"goc25519sm.TestLowOrderPoints.OldScalarMult failure: %d: expected all zero output, got %x",
 				i,
 				out,
 			)

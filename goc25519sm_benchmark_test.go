@@ -5,7 +5,7 @@
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-package OldCurve25519ScalarMult
+package goc25519sm
 
 import (
 	"fmt"
