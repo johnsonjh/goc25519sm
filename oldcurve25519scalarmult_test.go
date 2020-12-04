@@ -227,8 +227,8 @@ func TestLowOrderPoints(t *testing.T) {
 	defer leak.VerifyNone(t)
 	var x [X25519Size]byte
 	scalar := make([]byte, X25519Size)
-	tscalar := scalar[:]
-	copy(x[:], tscalar[:])
+	tscalar := scalar
+	copy(x[:], tscalar)
 	if _, err := crand.Read(tscalar); err != nil {
 		t.Fatal(
 			fmt.Sprintf(
