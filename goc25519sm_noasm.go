@@ -7,7 +7,7 @@
 
 // +build !amd64 !gc purego
 
-package OldCurve25519ScalarMult
+package goc25519sm
 
 import (
 	"fmt"
@@ -19,14 +19,14 @@ func oldScalarMult(out, in, base *[X25519Size]byte) error {
 	err = oldScalarMultGeneric(out, in, base)
 	if err != nil {
 		return fmt.Errorf(
-			"OldCurve25519ScalarMult.oldScalarMult.OldScalarMultGeneric failure: %v",
+			"goc25519sm.oldScalarMult.OldScalarMultGeneric failure: %v",
 			err,
 		)
 	}
 	err = oldScalarMultVerify(out, in, base)
 	if err != nil {
 		return fmt.Errorf(
-			"OldCurve25519ScalarMult.oldScalarMult.OldScalarMultGeneric.oldScalarMultVerify failure: %v",
+			"goc25519sm.oldScalarMult.OldScalarMultGeneric.oldScalarMultVerify failure: %v",
 			err,
 		)
 	}

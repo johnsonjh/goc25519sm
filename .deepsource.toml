@@ -5,8 +5,9 @@ name = "go"
 enabled = true
 
   [analyzers.meta]
-  import_paths = ["github.com/johnsonjh/OldCurve25519ScalarMult"]
+  import_paths = ["github.com/johnsonjh/goc25519sm"]
 
 [[transformers]]
 name = "gofmt"
 enabled = true
+

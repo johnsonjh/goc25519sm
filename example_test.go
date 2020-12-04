@@ -5,15 +5,15 @@
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-// Package OldCurve25519ScalarMult provides an implementation of
+// Package goc25519sm provides an implementation of
 // scalar multiplication on the elliptic curve known as Curve25519.
 // See https://cr.yp.to/ecdh.html and RFC-7748 for additional information.
-package OldCurve25519ScalarMult_test // import OldCurve25518ScalarMult "github.com/johnsonjh/OldCurve25519ScalarMult"
+package goc25519sm_test // import oc25510sm "github.com/johnsonjh/goc25519sm"
 
 import (
 	"fmt"
 
-	OldCurve25518ScalarMult "github.com/johnsonjh/OldCurve25519ScalarMult"
+	goc25519sm "github.com/johnsonjh/goc25519sm"
 )
 
 // OldScalarMult sets dst to the product in * base, where
@@ -22,8 +22,8 @@ import (
 // taken when copying into fixed-size arrays to avoid bugs!
 func ExampleOldScalarMult() {
 	var err error
-	var dst [OldCurve25518ScalarMult.X25519Size]byte
-	err = OldCurve25518ScalarMult.OldScalarMult(&dst, &OldCurve25518ScalarMult.ExamplePointA, &OldCurve25518ScalarMult.Basepoint)
+	var dst [goc25519sm.X25519Size]byte
+	err = goc25519sm.OldScalarMult(&dst, &goc25519sm.ExamplePointA, &goc25519sm.Basepoint)
 	if err != nil {
 		fmt.Println(fmt.Errorf("%v", err))
 	} else {
@@ -38,8 +38,8 @@ func ExampleOldScalarMult() {
 // Care must be taken when copying into fixed-size arrays to avoid bugs!
 func ExampleOldScalarBaseMult() {
 	var err error
-	var dst [OldCurve25518ScalarMult.X25519Size]byte
-	err = OldCurve25518ScalarMult.OldScalarBaseMult(&dst, &OldCurve25518ScalarMult.ExamplePointB)
+	var dst [goc25519sm.X25519Size]byte
+	err = goc25519sm.OldScalarBaseMult(&dst, &goc25519sm.ExamplePointB)
 	if err != nil {
 		fmt.Println(fmt.Errorf("%v", err))
 	} else {

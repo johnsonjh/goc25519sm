@@ -5,11 +5,11 @@
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-// Package OldCurve25519ScalarMult contains a non-deprecated, mostly
+// Package goc25519sm contains a non-deprecated, mostly
 // backwards-compatible implemention of ScalarBaseMult and ScalarMult
 // (as OldScalarBaseMult and ScalarMult), with validation and error
 // checking, provided as an alternative to the Go X2559 function.
-package OldCurve25519ScalarMult
+package goc25519sm
 
 import (
 	csubtle "crypto/subtle"
@@ -27,7 +27,7 @@ func OldScalarMult(dst, scalar, point *[X25519Size]byte) error {
 	oldScalarMult(dst, scalar, point)
 	err := oldScalarMultVerify(dst, scalar, point)
 	if err != nil {
-		return fmt.Errorf("OldCurve25519ScalarMult.OldScalarMult: %v", err)
+		return fmt.Errorf("goc25519sm.OldScalarMult: %v", err)
 	}
 	return nil
 }
@@ -37,7 +37,7 @@ func OldScalarMult(dst, scalar, point *[X25519Size]byte) error {
 func OldScalarBaseMult(dst, scalar *[X25519Size]byte) error {
 	err := OldScalarMult(dst, scalar, &Basepoint)
 	if err != nil {
-		return fmt.Errorf("OldCurve25519ScalarMult.OldScalarBaseMult: %v", err)
+		return fmt.Errorf("goc25519sm.OldScalarBaseMult: %v", err)
 	}
 	return nil
 }
@@ -47,7 +47,7 @@ func oldScalarMultVerify(dst, scalar, point *[X25519Size]byte) error {
 	// Check for bad scalar length input
 	if l := len(scalar); l != X25519Size {
 		return fmt.Errorf(
-			"OldCurve25519ScalarMult.oldScalarMultVerify: Bad scalar length: %d, expected %d",
+			"goc25519sm.oldScalarMultVerify: Bad scalar length: %d, expected %d",
 			l,
 			X25519Size,
 		)
@@ -55,7 +55,7 @@ func oldScalarMultVerify(dst, scalar, point *[X25519Size]byte) error {
 	// Check for bad point length input
 	if l := len(point); l != X25519Size {
 		return fmt.Errorf(
-			"OldCurve25519ScalarMult.oldScalarMultVerify: Bad point length: %d, expected %d",
+			"goc25519sm.oldScalarMultVerify: Bad point length: %d, expected %d",
 			l,
 			X25519Size,
 		)
@@ -69,7 +69,7 @@ func oldScalarMultVerify(dst, scalar, point *[X25519Size]byte) error {
 	var allZeroOutput [X25519Size]byte
 	if csubtle.ConstantTimeCompare(allZeroOutput[:], dst[:]) == 1 {
 		return fmt.Errorf(
-			"OldCurve25519ScalarMult.oldScalarMultVerify: Bad input point: low-order point detected",
+			"goc25519sm.oldScalarMultVerify: Bad input point: low-order point detected",
 		)
 	}
 	return nil
@@ -85,7 +85,7 @@ func oldScalarVerifyBasepoint(Basepoint [X25519Size]byte) error {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}) != 1 {
 		return fmt.Errorf(
-			"OldCurve25519ScalarMult.oldScalarVerifyBasepoint failure: got %v",
+			"goc25519sm.oldScalarVerifyBasepoint failure: got %v",
 			sBasepoint,
 		)
 	}
@@ -125,11 +125,11 @@ var (
 	}
 )
 
-// init initializes the OldCurve25519ScalarMult package
+// init initializes the goc25519sm package
 func init() {
 	// Ensure that Basepoint has not been molested
 	err := oldScalarVerifyBasepoint(Basepoint)
 	if err != nil {
-		panic(fmt.Sprintf("OldCurve25519ScalarMult.init failure: %v", err))
+		panic(fmt.Sprintf("goc25519sm.init failure: %v", err))
 	}
 }

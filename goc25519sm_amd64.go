@@ -7,7 +7,7 @@
 //
 // +build amd64,gc,!purego
 
-package OldCurve25519ScalarMult
+package goc25519sm
 
 // These functions are implemented in the .s files. The names
 // of the functions in the rest of the file are also taken
