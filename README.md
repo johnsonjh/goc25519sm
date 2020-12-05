@@ -16,12 +16,12 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 
 ## Availability
 
-* [Gridfinity GitLab](https://gitlab.gridfinity.com/jeff/goc25519sm)
-* [GitHub](https://github.com/johnsonjh/goc25519sm)
+*  [Gridfinity GitLab](https://gitlab.gridfinity.com/jeff/goc25519sm)
+*  [GitHub](https://github.com/johnsonjh/goc25519sm)
 
 ## Documentation
 
-* [goc25519sm](https://pkg.go.dev/github.com/johnsonjh/goc25519sm) *GoDocs*
+*  [goc25519sm](https://pkg.go.dev/github.com/johnsonjh/goc25519sm) *GoDocs*
 
 ## License
 
