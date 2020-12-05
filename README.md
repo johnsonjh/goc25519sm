@@ -2,6 +2,7 @@
 
 A Go package for validated and consensus-safe Curve25519 scalar multiplication
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1554a9e30cff45aa80635c1e00dafa9e)](https://app.codacy.com/gh/johnsonjh/goc25519sm?utm_source=github.com&utm_medium=referral&utm_content=johnsonjh/goc25519sm&utm_campaign=Badge_Grade)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://github.com/johnsonjh/goc25519sm/blob/main/LICENSE)
 [![GoVersion](https://img.shields.io/github/go-mod/go-version/johnsonjh/goc25519sm.svg)](https://github.com/johnsonjh/goc25519sm/blob/master/go.mod)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/johnsonjh/goc25519sm)](https://pkg.go.dev/github.com/johnsonjh/goc25519sm)
