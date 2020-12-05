@@ -14,16 +14,16 @@ import (
 )
 
 // OldScalarMult -> noasm
-func oldScalarMult(out, in, base *[X25519Size]byte) error {
+func oldScalarMult(dst, scalar, base *[X25519Size]byte) error {
 	var err error
-	err = oldScalarMultGeneric(out, in, base)
+	err = OldScalarMultGeneric(dst, scalar, base)
 	if err != nil {
 		return fmt.Errorf(
 			"goc25519sm.oldScalarMult.OldScalarMultGeneric failure: %v",
 			err,
 		)
 	}
-	err = oldScalarMultVerify(out, in, base)
+	err = oldScalarMultVerify(dst, scalar, base)
 	if err != nil {
 		return fmt.Errorf(
 			"goc25519sm.oldScalarMult.OldScalarMultGeneric.oldScalarMultVerify failure: %v",
