@@ -115,7 +115,7 @@ func testTestVectors(
 //   ... MUST mask the most significant bit in the final byte."
 func TestHighBitIgnored(t *testing.T) {
 	defer leak.VerifyNone(t)
-	var err error = fmt.Errorf("err never returned")
+	var err error
 	var s, u [goc25519sm.X25519Size]byte
 	crand.Read(s[:])
 	crand.Read(u[:])
@@ -127,8 +127,6 @@ func TestHighBitIgnored(t *testing.T) {
 			"goc25519sm.TestHighBitIgnored.OldScalarMult failure: %v",
 			err,
 		)
-	} else {
-		err = fmt.Errorf("err never returned")
 	}
 	u[31] |= 0x80
 	err = goc25519sm.OldScalarMult(&hi1, &s, &u)
@@ -147,7 +145,7 @@ func TestHighBitIgnored(t *testing.T) {
 
 func TestOldScalarBaseMult1024(t *testing.T) {
 	defer leak.VerifyNone(t)
-	var err error = fmt.Errorf("err never returned")
+	var err error
 	csk := [2][goc25519sm.X25519Size]byte{
 		{255},
 	}
@@ -169,7 +167,7 @@ func TestOldScalarBaseMult1024(t *testing.T) {
 
 func TestBasepointMolestation(t *testing.T) {
 	defer leak.VerifyNone(t)
-	var err error = fmt.Errorf("err never returned")
+	var err error
 	oBasepoint := goc25519sm.Basepoint
 	err = goc25519sm.OldScalarVerifyBasepoint(goc25519sm.Basepoint)
 	if err != nil {
@@ -180,8 +178,6 @@ func TestBasepointMolestation(t *testing.T) {
 				goc25519sm.Basepoint,
 			),
 		)
-	} else {
-		err = nil
 	}
 	goc25519sm.Basepoint = [goc25519sm.X25519Size]byte{
 		0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
@@ -204,7 +200,7 @@ func TestBasepointMolestation(t *testing.T) {
 
 func TestOldScalarBaseMult200(t *testing.T) {
 	defer leak.VerifyNone(t)
-	var err error = fmt.Errorf("err never returned")
+	var err error
 	var a, b [goc25519sm.X25519Size]byte
 	in := &a
 	out := &b
@@ -233,7 +229,7 @@ func TestOldScalarBaseMult200(t *testing.T) {
 func TestLowOrderPoints(t *testing.T) {
 	defer leak.VerifyNone(t)
 	var x [goc25519sm.X25519Size]byte
-	var err error = fmt.Errorf("err never returned")
+	var err error
 	scalar := make([]byte, goc25519sm.X25519Size)
 	tscalar := scalar
 	copy(x[:], tscalar)
@@ -244,8 +240,6 @@ func TestLowOrderPoints(t *testing.T) {
 				err,
 			),
 		)
-	} else {
-		err = nil
 	}
 	for i, p := range lowOrderPoints {
 		var out [goc25519sm.X25519Size]byte

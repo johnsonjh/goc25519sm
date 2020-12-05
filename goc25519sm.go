@@ -102,8 +102,7 @@ func OldScalarMult(dst, scalar, point *[X25519Size]byte) error {
 // where base is the canonical Curve25519 generator, returning an
 // error in the case of validation failures.
 func OldScalarBaseMult(dst, scalar *[X25519Size]byte) error {
-	var err error
-	err = OldScalarMult(dst, scalar, &Basepoint)
+	err := OldScalarMult(dst, scalar, &Basepoint)
 	if err != nil {
 		return fmt.Errorf("goc25519sm.OldScalarBaseMult failure: %v", err)
 	}
@@ -215,8 +214,7 @@ var (
 // init initializes the goc25519sm package
 func init() {
 	// Ensure that Basepoint has not been molested
-	var initerr error
-	initerr = OldScalarVerifyBasepoint(Basepoint)
+	initerr := OldScalarVerifyBasepoint(Basepoint)
 	if initerr != nil {
 		panic(fmt.Sprintf("goc25519sm.init.OldScalarVerifyBasepoint failure: %v", initerr))
 	}
