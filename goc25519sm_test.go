@@ -99,12 +99,13 @@ func testTestVectors(
 	defer leak.VerifyNone(t)
 	for _, tv := range testVectors {
 		var got [goc25519sm.X25519Size]byte
-		goc25519sm.OldScalarMult(&got, &tv.In, &tv.Base)
-		if !bytes.Equal(got[:], tv.Expect[:]) {
+		err := goc25519sm.OldScalarMult(&got, &tv.In, &tv.Base)
+		if !bytes.Equal(got[:], tv.Expect[:]) || err != nil {
 			t.Logf("    in = %x", tv.In)
 			t.Logf("  base = %x", tv.Base)
 			t.Logf("   got = %x", got)
 			t.Logf("expect = %x", tv.Expect)
+			t.Logf("   err = %v", err)
 			t.Fail()
 		}
 	}
@@ -117,8 +118,20 @@ func TestHighBitIgnored(t *testing.T) {
 	defer leak.VerifyNone(t)
 	var err error
 	var s, u [goc25519sm.X25519Size]byte
-	crand.Read(s[:])
-	crand.Read(u[:])
+	_, err = crand.Read(s[:])
+	if err != nil {
+		t.Errorf(
+			"goc25519sm.TestHighBitIgnored.crand.Read(s[:]) failure: %v",
+			err,
+		)
+	}
+	_, err = crand.Read(u[:])
+	if err != nil {
+		t.Errorf(
+			"goc25519sm.TestHighBitIgnored.crand.Read(u[:]) failure: %v",
+			err,
+		)
+	}
 	var hi0, hi1 [goc25519sm.X25519Size]byte
 	u[31] &= 0x7f
 	err = goc25519sm.OldScalarMult(&hi0, &s, &u)
