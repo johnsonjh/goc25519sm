@@ -25,7 +25,7 @@ func ExampleOldScalarMult() {
 	if err != nil {
 		fmt.Println(fmt.Errorf("Failure: %v", err))
 	} else {
-		fmt.Println(fmt.Sprintf("%v", dst))
+		fmt.Printf("%v\n", dst)
 	}
 	// Output: [66 122 229 107 218 63 64 231 243 68 229 108 16 57 164 54 219 131 67 199 51 187 152 115 156 62 194 207 141 229 208 116]
 }
@@ -42,7 +42,7 @@ func ExampleOldScalarBaseMult() {
 	if err != nil {
 		fmt.Println(fmt.Errorf("Failure: %v", err))
 	} else {
-		fmt.Println(fmt.Sprintf("%v", dst))
+		fmt.Printf("%v\n", dst)
 	}
 	// Output: [93 146 199 126 178 229 251 64 79 89 30 113 124 116 224 71 248 157 194 158 254 59 217 255 200 96 218 131 168 125 174 103]
 }
