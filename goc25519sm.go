@@ -53,24 +53,27 @@ package goc25519sm
 // behavior from panic to errors by taking some explicit action, such as
 // calling a function for this specific purpose. While this could make this
 // library "drop-in compatible" with the original, at least in regards to weak
-// key generation, the trade-off is that any unchecked errors, or errors in
-// implementation, such as the passing truncated scalar or point inputs, or
-// providing low-order inputs to these functions results in changing possible
+// key generation. The trade-off is that any unchecked errors, or errors in
+// implementation, such as the passing of truncated scalar or point inputs, or
+// providing low-order inputs to these functions, results in changing possible
 // "silent" security issues (depending on the protocol implementation), into
 // application crashes. While it is debatable if crashing is actually worse
 // than continuing with possible security vulnerabilities, a panic-by-default
 // behavior would at least ensure that these errors do not slip by undetected.
+// STATUS: Planned for a future release.
 
-// TODO(jhj): (2) OldScalarMult and OldScalarBaseMult, should be constrained to
+// TODO(jhj): (2) OldScalarMult and OldScalarBaseMult should be constrained to
 // strictly operate in constant time, even in the case of validation failures.
 // This could be achieved by requiring oldScalarMultVerify, which already does
 // constant time validation, to always perform all possible checks before
 // returning, which may protect against certain types of implementation errors.
+// STATUS: Planned for the next major release.
 
 // TODO(jhj): (3) Validation checks are performed several times, much of which
 // could be avoided with the use of https://github.com/awnumar/memguard, which
 // implements mitigations in areas of concern. Most of these mitigations are
 // inspired by those which are currently implemented in libsodium.
+// STATUS: Investigating.
 
 import (
 	csubtle "crypto/subtle"
