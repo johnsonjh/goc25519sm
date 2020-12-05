@@ -92,7 +92,7 @@ func oldScalarVerifyBasepoint(Basepoint [X25519Size]byte) error {
 	return nil
 }
 
-// Basepoint is the x corrdinate of
+// Basepoint is the x coordinate of
 // the canonical Curve25519 generator.
 var (
 	Basepoint = [X25519Size]byte{
