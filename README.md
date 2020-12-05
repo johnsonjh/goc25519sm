@@ -11,6 +11,7 @@
 [![LgtmAlerts](https://img.shields.io/lgtm/alerts/g/johnsonjh/goc25519sm.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/johnsonjh/goc25519sm/alerts/)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjohnsonjh%2Fgoc25519sm.svg?type=shield)](https://app.fossa.com/reports/64562da2-2df4-4566-8120-2200ca634465)
 
+See documentation at [pkg.go.dev](https://pkg.go.dev/github.com/johnsonjh/goc25519sm)
 
 ## License
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjohnsonjh%2Fgoc25519sm.svg?type=large)](https://app.fossa.com/reports/64562da2-2df4-4566-8120-2200ca634465)
