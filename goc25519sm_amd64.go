@@ -9,6 +9,10 @@
 
 package goc25519sm
 
+import (
+	"fmt"
+)
+
 // These functions are implemented in the .s files. The names
 // of the functions in the rest of the file are also taken
 // from the SUPERCOP sources to help people following along.
@@ -54,9 +58,12 @@ func mladder(xr, zr *[5]uint64, s *[X25519Size]byte) {
 	*zr = work[2]
 }
 
-func oldScalarMult(out, in, base *[X25519Size]byte) {
+func oldScalarMult(dst, scalar, base *[X25519Size]byte) error {
 	var e [X25519Size]byte
-	copy(e[:], (*in)[:])
+	var err error
+	// Dubious to perform clamping at this stage,
+	// but the behavior matches that of libsodium
+	copy(e[:], (*scalar)[:])
 	e[0] &= 248
 	e[31] &= 127
 	e[31] |= 64
@@ -65,7 +72,15 @@ func oldScalarMult(out, in, base *[X25519Size]byte) {
 	mladder(&t, &z, &e)
 	invert(&z, &z)
 	mul(&t, &t, &z)
-	pack(out, &t)
+	pack(dst, &t)
+	err = oldScalarMultVerify(dst, scalar, base)
+	if err != nil {
+		return fmt.Errorf(
+			"goc25519sm.oldScalarMult.OldScalarMult_amd64.oldScalarMultVerify failure: %v",
+			err,
+		)
+	}
+	return nil
 }
 
 func setint(r *[5]uint64, v uint64) {

@@ -59,18 +59,18 @@ func feCSwap(f, g *fieldElement, b int32) {
 	}
 }
 
-// load3 reads a 24-bit, little-endian value from in.
-func load3(in []byte) int64 {
+// load3 reads a 24-bit, little-endian value from scalar.
+func load3(scalar []byte) int64 {
 	var r int64
-	r = int64(in[0])
-	r |= int64(in[1]) << 8
-	r |= int64(in[2]) << 16
+	r = int64(scalar[0])
+	r |= int64(scalar[1]) << 8
+	r |= int64(scalar[2]) << 16
 	return r
 }
 
-// load4 reads a 32-bit, little-endian value from in.
-func load4(in []byte) int64 {
-	return int64(binary.LittleEndian.Uint32(in))
+// load4 reads a 32-bit, little-endian value from scalar.
+func load4(scalar []byte) int64 {
+	return int64(binary.LittleEndian.Uint32(scalar))
 }
 
 func feFromBytes(dst *fieldElement, src *[X25519Size]byte) {
@@ -675,8 +675,8 @@ func feMul121666(h, f *fieldElement) {
 	h[9] = int32(h9)
 }
 
-// feInvert sets out = z^-1.
-func feInvert(out, z *fieldElement) {
+// feInvert sets dst = z^-1.
+func feInvert(dst, z *fieldElement) {
 	var t0, t1, t2, t3 fieldElement
 	var i int
 	feSquare(&t0, z)
@@ -733,17 +733,25 @@ func feInvert(out, z *fieldElement) {
 	for i = 1; i < 5; i++ {
 		feSquare(&t1, &t1)
 	}
-	feMul(out, &t1, &t0)
+	feMul(dst, &t1, &t0)
 }
 
-func oldScalarMultGeneric(out, in, base *[X25519Size]byte) error {
+// OldScalarMultGeneric provides a platform-independent pure Go implementation
+// of OldScalarMult. It is used by default when a platform-specific optimized
+// version of OldScalarMult is not available. It is exported to provide
+// implementators an alternative if they encounter any trouble with an
+// optimized version and wish to call the pure Go implementation explicitly,
+// and should not be needed for normal use.
+func OldScalarMultGeneric(dst, scalar, point *[X25519Size]byte) error {
 	var e [X25519Size]byte
-	copy(e[:], in[:])
+	// Dubious to perform clamp at this stage,
+	// but behavior matches that of libsodium
+	copy(e[:], scalar[:])
 	e[0] &= 248
 	e[31] &= 127
 	e[31] |= 64
 	var x1, x2, z2, x3, z3, tmp0, tmp1 fieldElement
-	feFromBytes(&x1, base)
+	feFromBytes(&x1, point)
 	feOne(&x2)
 	feCopy(&x3, &x1)
 	feOne(&z3)
@@ -778,6 +786,6 @@ func oldScalarMultGeneric(out, in, base *[X25519Size]byte) error {
 	feCSwap(&z2, &z3, swap)
 	feInvert(&z2, &z2)
 	feMul(&x2, &x2, &z2)
-	feToBytes(out, &x2)
+	feToBytes(dst, &x2)
 	return nil
 }

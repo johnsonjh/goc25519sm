@@ -5,29 +5,31 @@
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-package goc25519sm
+package goc25519sm_test
 
 import (
 	"fmt"
 	mrand "math/rand"
 	"testing"
 	"time"
+
+	goc25519sm "github.com/johnsonjh/goc25519sm"
 )
 
 func benchmarkOldScalarBaseMult(x int, b *testing.B) {
-	var in, out [X25519Size]byte
+	var in, out [goc25519sm.X25519Size]byte
 	for bSetup := 0; bSetup < 32; bSetup = (bSetup + 2) {
 		in[bSetup] = ((byte(bSetup) + 1) + byte(x))
 		in[bSetup+1] = (in[bSetup] + byte(x))
 	}
 	var err error
-	b.SetBytes(X25519Size)
+	b.SetBytes(goc25519sm.X25519Size)
 	for i := 0; i < b.N; i++ {
-		err = OldScalarBaseMult(&out, &in)
+		err = goc25519sm.OldScalarBaseMult(&out, &in)
 		if err != nil {
 			b.Fatal(
 				fmt.Sprintf(
-					"benchmarkOldScalarBaseMult.OldScalarBaseMult failure: %v: input=%v, output=%v",
+					"benchmarkOldScalarBaseMult.OldScalarBaseMult failure: %v (input=%v, output=%v)",
 					err,
 					in,
 					out,
@@ -35,18 +37,26 @@ func benchmarkOldScalarBaseMult(x int, b *testing.B) {
 			)
 		}
 	}
-	Basepoint = out
-	err = oldScalarVerifyBasepoint(Basepoint)
+	// Overwrite ExamplePointA with the bench output, and invoke
+	// OldScalarVerifyBasepoint to ensure it correctly detects
+	// that this output is NOT the Basepoint; this is mostly to
+	// ensure the benchmark is not aggressively optimized away
+	// by performing actual (constant time) work on the output.
+	goc25519sm.ExamplePointA = out
+	err = goc25519sm.OldScalarVerifyBasepoint(goc25519sm.ExamplePointA)
 	if err == nil {
 		b.Fatal(
 			fmt.Sprintf(
-				"benchmarkOldScalarBaseMult.oldScalarVerifyBasepoint failure: %v",
+				"benchmarkOldScalarBaseMult.OldScalarVerifyBasepoint false positive failure: %v",
 				err,
 			),
 		)
 	}
 }
 
+// Setup multiple iterations with randomized inputs. Use
+// of the CSPRNG is not needed here for simple benchmark
+// testing, but should always be used in production code.
 func BenchmarkOldScalarBaseMult_01(b *testing.B) {
 	mrand.Seed(time.Now().UnixNano())
 	z := mrand.Intn((((1 << 8) - 1 - 1) - 1) + 1)

@@ -6,7 +6,7 @@
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-package goc25519sm
+package goc25519sm_test
 
 import (
 	"bytes"
@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"testing"
 
+	goc25519sm "github.com/johnsonjh/goc25519sm"
 	leak "go.uber.org/goleak"
 )
 
@@ -21,7 +22,7 @@ const (
 	expectedHex = "89161fde887b2b53de549af483940106ecc114d6982daa98256de23bdf77661a"
 )
 
-var lowOrderPoints = [][X25519Size]byte{
+var lowOrderPoints = [][goc25519sm.X25519Size]byte{
 	{
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -72,7 +73,7 @@ var lowOrderPoints = [][X25519Size]byte{
 	},
 }
 
-var curved25519Expected = [X25519Size]byte{
+var curved25519Expected = [goc25519sm.X25519Size]byte{
 	0xac, 0xce, 0x24, 0xb1, 0xd4, 0xa2, 0x36, 0x21,
 	0x15, 0xe2, 0x3e, 0x84, 0x3c, 0x23, 0x2b, 0x5f,
 	0x95, 0x6c, 0xc0, 0x7b, 0x95, 0x82, 0xd7, 0x93,
@@ -83,22 +84,22 @@ func TestTestVectors(t *testing.T) {
 	defer leak.VerifyNone(t)
 	t.Run(
 		"PureGo",
-		func(t *testing.T) { testTestVectors(t, oldScalarMultGeneric) },
+		func(t *testing.T) { testTestVectors(t, goc25519sm.OldScalarMultGeneric) },
 	)
 	t.Run(
 		"Native",
-		func(t *testing.T) { testTestVectors(t, OldScalarMult) },
+		func(t *testing.T) { testTestVectors(t, goc25519sm.OldScalarMult) },
 	)
 }
 
 func testTestVectors(
 	t *testing.T,
-	OldScalarMult func(dst, scalar, point *[X25519Size]byte) error,
+	OldScalarMult func(dst, scalar, point *[goc25519sm.X25519Size]byte) error,
 ) {
 	defer leak.VerifyNone(t)
 	for _, tv := range testVectors {
-		var got [X25519Size]byte
-		OldScalarMult(&got, &tv.In, &tv.Base)
+		var got [goc25519sm.X25519Size]byte
+		goc25519sm.OldScalarMult(&got, &tv.In, &tv.Base)
 		if !bytes.Equal(got[:], tv.Expect[:]) {
 			t.Logf("    in = %x", tv.In)
 			t.Logf("  base = %x", tv.Base)
@@ -109,26 +110,28 @@ func testTestVectors(
 	}
 }
 
-// TestHighBitIgnored tests the following requirement in RFC 7748:
+// TestHighBitIgnored tests the following requirement in RFC-7748:
 //  "When receiving such an array, implementations of X25519
 //   ... MUST mask the most significant bit in the final byte."
 func TestHighBitIgnored(t *testing.T) {
 	defer leak.VerifyNone(t)
-	var err error
-	var s, u [X25519Size]byte
+	var err error = fmt.Errorf("err never returned")
+	var s, u [goc25519sm.X25519Size]byte
 	crand.Read(s[:])
 	crand.Read(u[:])
-	var hi0, hi1 [X25519Size]byte
+	var hi0, hi1 [goc25519sm.X25519Size]byte
 	u[31] &= 0x7f
-	err = OldScalarMult(&hi0, &s, &u)
+	err = goc25519sm.OldScalarMult(&hi0, &s, &u)
 	if err != nil {
 		t.Errorf(
 			"goc25519sm.TestHighBitIgnored.OldScalarMult failure: %v",
 			err,
 		)
+	} else {
+		err = fmt.Errorf("err never returned")
 	}
 	u[31] |= 0x80
-	err = OldScalarMult(&hi1, &s, &u)
+	err = goc25519sm.OldScalarMult(&hi1, &s, &u)
 	if err != nil {
 		t.Errorf(
 			"goc25519sm.TestHighBitIgnored.OldScalarMult faulure: %v",
@@ -144,12 +147,12 @@ func TestHighBitIgnored(t *testing.T) {
 
 func TestOldScalarBaseMult1024(t *testing.T) {
 	defer leak.VerifyNone(t)
-	var err error
-	csk := [2][X25519Size]byte{
+	var err error = fmt.Errorf("err never returned")
+	csk := [2][goc25519sm.X25519Size]byte{
 		{255},
 	}
 	for i := 0; i < 1024; i++ {
-		err = OldScalarBaseMult(&csk[(i&1)^1], &csk[i&1])
+		err = goc25519sm.OldScalarBaseMult(&csk[(i&1)^1], &csk[i&1])
 		if err != nil {
 			t.Errorf(
 				"goc25519sm.TestOldScalarBaseMult1024.OldScalarBaseMult failure: %v",
@@ -166,44 +169,48 @@ func TestOldScalarBaseMult1024(t *testing.T) {
 
 func TestBasepointMolestation(t *testing.T) {
 	defer leak.VerifyNone(t)
-	var err error
-	err = oldScalarVerifyBasepoint(Basepoint)
+	var err error = fmt.Errorf("err never returned")
+	oBasepoint := goc25519sm.Basepoint
+	err = goc25519sm.OldScalarVerifyBasepoint(goc25519sm.Basepoint)
 	if err != nil {
 		t.Fatal(
 			fmt.Sprintf(
-				"goc25519sm.TestBasepointMolestation.oldScalarVerifyBasepoint failure: falsely detected molestation of pristine Basepoint: got %v, wanted %v",
+				"goc25519sm.TestBasepointMolestation.OldScalarVerifyBasepoint failure: falsely detected molestation of pristine Basepoint: got %v, wanted %v",
 				err,
-				Basepoint,
+				goc25519sm.Basepoint,
 			),
 		)
+	} else {
+		err = nil
 	}
-	oBasepoint := Basepoint
-	Basepoint := [X25519Size]byte{
+	goc25519sm.Basepoint = [goc25519sm.X25519Size]byte{
 		0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
 		0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16,
 		0x17, 0x18, 0x19, 0x20, 0x21, 0x22, 0x23, 0x24,
 		0x25, 0x26, 0x27, 0x28, 0x29, 0x30, 0x31, 0x32,
 	}
-	err = oldScalarVerifyBasepoint(Basepoint)
+	err = goc25519sm.OldScalarVerifyBasepoint(goc25519sm.Basepoint)
 	if err == nil {
 		t.Fatal(
 			fmt.Sprintf(
-				"goc25519sm.TestBasepointMolestation.oldScalarVerifyBasepoint failure: failed to detect Basepoint molestation: got %v, wanted %v",
-				Basepoint,
+				"goc25519sm.TestBasepointMolestation.OldScalarVerifyBasepoint failure: failed to detect Basepoint molestation: got %v, wanted %v",
+				goc25519sm.Basepoint,
 				oBasepoint,
 			),
 		)
 	}
+	goc25519sm.Basepoint = oBasepoint
 }
 
 func TestOldScalarBaseMult200(t *testing.T) {
 	defer leak.VerifyNone(t)
-	var a, b [X25519Size]byte
+	var err error = fmt.Errorf("err never returned")
+	var a, b [goc25519sm.X25519Size]byte
 	in := &a
 	out := &b
 	a[0] = 1
 	for i := 0; i < 200; i++ {
-		err := OldScalarBaseMult(out, in)
+		err = goc25519sm.OldScalarBaseMult(out, in)
 		if err != nil {
 			t.Fatal(
 				fmt.Sprintf("goc25519sm.TestOldScalarBaseMult200.OldScalarBaseMult failure: %v",
@@ -225,28 +232,31 @@ func TestOldScalarBaseMult200(t *testing.T) {
 
 func TestLowOrderPoints(t *testing.T) {
 	defer leak.VerifyNone(t)
-	var x [X25519Size]byte
-	scalar := make([]byte, X25519Size)
+	var x [goc25519sm.X25519Size]byte
+	var err error = fmt.Errorf("err never returned")
+	scalar := make([]byte, goc25519sm.X25519Size)
 	tscalar := scalar
 	copy(x[:], tscalar)
-	if _, err := crand.Read(tscalar); err != nil {
+	if _, err = crand.Read(tscalar); err != nil {
 		t.Fatal(
 			fmt.Sprintf(
 				"goc25519sm.TestLowOrderPoints failure: crand.Read failure: %v",
 				err,
 			),
 		)
+	} else {
+		err = nil
 	}
 	for i, p := range lowOrderPoints {
-		var out [X25519Size]byte
-		err := OldScalarMult(&out, &x, &p)
+		var out [goc25519sm.X25519Size]byte
+		err = goc25519sm.OldScalarMult(&out, &x, &p)
 		if err == nil {
 			t.Errorf(
 				"goc25519sm.TestLowOrderPoints.OldScalarMult failure: %d: expected error, got nil",
 				i,
 			)
 		}
-		var allZeroOutput [X25519Size]byte
+		var allZeroOutput [goc25519sm.X25519Size]byte
 		if out != allZeroOutput {
 			t.Errorf(
 				"goc25519sm.TestLowOrderPoints.OldScalarMult failure: %d: expected all zero output, got %x",
