@@ -14,6 +14,7 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 [![CoverageStatus](https://coveralls.io/repos/github/johnsonjh/goc25519sm/badge.svg)](https://coveralls.io/github/johnsonjh/goc25519sm)
 [![CodacyBadge](https://api.codacy.com/project/badge/Grade/1554a9e30cff45aa80635c1e00dafa9e)](https://app.codacy.com/gh/johnsonjh/goc25519sm?utm_source=github.com&utm_medium=referral&utm_content=johnsonjh/goc25519sm&utm_campaign=Badge_Grade)
 [![LgtmAlerts](https://img.shields.io/lgtm/alerts/g/johnsonjh/goc25519sm.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/johnsonjh/goc25519sm/alerts/)
+[![CodeBeat](https://codebeat.co/badges/95866deb-d1d0-4fe9-a6ac-807f8442c400)](https://codebeat.co/projects/github-com-johnsonjh-goc25519sm-master)
 [![TickgitTODOs](https://img.shields.io/endpoint?url=https://api.tickgit.com/badge?repo=github.com/johnsonjh/goc25519sm)](https://www.tickgit.com/browse?repo=github.com/johnsonjh/goc25519sm)
 
 ## Availability
