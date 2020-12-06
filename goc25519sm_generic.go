@@ -7,8 +7,6 @@
 
 package goc25519sm
 
-import "encoding/binary"
-
 // This code is a port of the public domain, "ref10" implementation of
 // Curve25519 from SUPERCOP 20130419 by D. J. Bernstein.
 
@@ -18,10 +16,10 @@ import "encoding/binary"
 // Bounds on each t[i] vary depending on context.
 type fieldElement [10]int32
 
+var zero fieldElement
+
 func feZero(fe *fieldElement) {
-	for i := range fe {
-		fe[i] = 0
-	}
+	copy(fe[:], zero[:])
 }
 
 func feOne(fe *fieldElement) {
@@ -42,9 +40,7 @@ func feSub(dst, a, b *fieldElement) {
 }
 
 func feCopy(dst, src *fieldElement) {
-	for i := range dst {
-		dst[i] = src[i]
-	}
+	copy(dst[:], src[:])
 }
 
 // feCSwap replaces (f,g) with (g,f) if b == 1;
@@ -59,7 +55,6 @@ func feCSwap(f, g *fieldElement, b int32) {
 	}
 }
 
-// load3 reads a 24-bit, little-endian value from scalar.
 func load3(scalar []byte) int64 {
 	var r int64
 	r = int64(scalar[0])
@@ -67,10 +62,13 @@ func load3(scalar []byte) int64 {
 	r |= int64(scalar[2]) << 16
 	return r
 }
-
-// load4 reads a 32-bit, little-endian value from scalar.
 func load4(scalar []byte) int64 {
-	return int64(binary.LittleEndian.Uint32(scalar))
+	var r int64
+	r = int64(scalar[0])
+	r |= int64(scalar[1]) << 8
+	r |= int64(scalar[2]) << 16
+	r |= int64(scalar[3]) << 24
+	return r
 }
 
 func feFromBytes(dst *fieldElement, src *[X25519Size]byte) {
@@ -272,8 +270,8 @@ func feMul(h, f, g *fieldElement) {
 	g7 := g[7]
 	g8 := g[8]
 	g9 := g[9]
-	g1_19 := 19 * g1 // 1.4*2^29
-	g2_19 := 19 * g2 // 1.4*2^30; still ok
+	g1_19 := 19 * g1
+	g2_19 := 19 * g2
 	g3_19 := 19 * g3
 	g4_19 := 19 * g4
 	g5_19 := 19 * g5
@@ -397,70 +395,42 @@ func feMul(h, f, g *fieldElement) {
 	h8 := f0g8 + f1g7_2 + f2g6 + f3g5_2 + f4g4 + f5g3_2 + f6g2 + f7g1_2 + f8g0 + f9g9_38
 	h9 := f0g9 + f1g8 + f2g7 + f3g6 + f4g5 + f5g4 + f6g3 + f7g2 + f8g1 + f9g0
 	var carry [10]int64
-	// |h0| <= (1.1*1.1*2^52*(1+19+19+19+19)+1.1*1.1*2^50*(38+38+38+38+38))
-	//   i.e. |h0| <= 1.2*2^59; narrower ranges for h2, h4, h6, h8
-	// |h1| <= (1.1*1.1*2^51*(1+1+19+19+19+19+19+19+19+19))
-	//   i.e. |h1| <= 1.5*2^58; narrower ranges for h3, h5, h7, h9
 	carry[0] = (h0 + (1 << 25)) >> 26
 	h1 += carry[0]
 	h0 -= carry[0] << 26
 	carry[4] = (h4 + (1 << 25)) >> 26
 	h5 += carry[4]
 	h4 -= carry[4] << 26
-	// |h0| <= 2^25
-	// |h4| <= 2^25
-	// |h1| <= 1.51*2^58
-	// |h5| <= 1.51*2^58
 	carry[1] = (h1 + (1 << 24)) >> 25
 	h2 += carry[1]
 	h1 -= carry[1] << 25
 	carry[5] = (h5 + (1 << 24)) >> 25
 	h6 += carry[5]
 	h5 -= carry[5] << 25
-	// |h1| <= 2^24; from now on fits into int32
-	// |h5| <= 2^24; from now on fits into int32
-	// |h2| <= 1.21*2^59
-	// |h6| <= 1.21*2^59
 	carry[2] = (h2 + (1 << 25)) >> 26
 	h3 += carry[2]
 	h2 -= carry[2] << 26
 	carry[6] = (h6 + (1 << 25)) >> 26
 	h7 += carry[6]
 	h6 -= carry[6] << 26
-	// |h2| <= 2^25; from now on fits into int32 unchanged
-	// |h6| <= 2^25; from now on fits into int32 unchanged
-	// |h3| <= 1.51*2^58
-	// |h7| <= 1.51*2^58
 	carry[3] = (h3 + (1 << 24)) >> 25
 	h4 += carry[3]
 	h3 -= carry[3] << 25
 	carry[7] = (h7 + (1 << 24)) >> 25
 	h8 += carry[7]
 	h7 -= carry[7] << 25
-	// |h3| <= 2^24; from now on fits into int32 unchanged
-	// |h7| <= 2^24; from now on fits into int32 unchanged
-	// |h4| <= 1.52*2^33
-	// |h8| <= 1.52*2^33
 	carry[4] = (h4 + (1 << 25)) >> 26
 	h5 += carry[4]
 	h4 -= carry[4] << 26
 	carry[8] = (h8 + (1 << 25)) >> 26
 	h9 += carry[8]
 	h8 -= carry[8] << 26
-	// |h4| <= 2^25; from now on fits into int32 unchanged
-	// |h8| <= 2^25; from now on fits into int32 unchanged
-	// |h5| <= 1.01*2^24
-	// |h9| <= 1.51*2^58
 	carry[9] = (h9 + (1 << 24)) >> 25
 	h0 += carry[9] * 19
 	h9 -= carry[9] << 25
-	// |h9| <= 2^24; from now on fits into int32 unchanged
-	// |h0| <= 1.8*2^37
 	carry[0] = (h0 + (1 << 25)) >> 26
 	h1 += carry[0]
 	h0 -= carry[0] << 26
-	// |h0| <= 2^25; from now on fits into int32 unchanged
-	// |h1| <= 1.01*2^24
 	h[0] = int32(h0)
 	h[1] = int32(h1)
 	h[2] = int32(h2)
@@ -675,65 +645,58 @@ func feMul121666(h, f *fieldElement) {
 	h[9] = int32(h9)
 }
 
-// feInvert sets dst = z^-1.
 func feInvert(dst, z *fieldElement) {
 	var t0, t1, t2, t3 fieldElement
 	var i int
-	feSquare(&t0, z)
-	for i = 1; i < 1; i++ {
-		feSquare(&t0, &t0)
-	}
-	feSquare(&t1, &t0)
-	for i = 1; i < 2; i++ {
+	feSquare(&t0, z)			// 2^1
+	feSquare(&t1, &t0)			// 2^2
+	for i = 1; i < 2; i++ {		// 2^3
 		feSquare(&t1, &t1)
 	}
-	feMul(&t1, z, &t1)
-	feMul(&t0, &t0, &t1)
-	feSquare(&t2, &t0)
-	for i = 1; i < 1; i++ {
+	feMul(&t1, z, &t1)			// 2^3 + 2^0
+	feMul(&t0, &t0, &t1)		// 2^3 + 2^1 + 2^0
+	feSquare(&t2, &t0)			// 2^4 + 2^2 + 2^1
+	feMul(&t1, &t1, &t2)		// 2^4 + 2^3 + 2^2 + 2^1 + 2^0
+	feSquare(&t2, &t1)			// 5,4,3,2,1
+	for i = 1; i < 5; i++ {		// 9,8,7,6,5
 		feSquare(&t2, &t2)
 	}
-	feMul(&t1, &t1, &t2)
-	feSquare(&t2, &t1)
-	for i = 1; i < 5; i++ {
+	feMul(&t1, &t2, &t1)		// 9,8,7,6,5,4,3,2,1,0
+	feSquare(&t2, &t1)			// 10..1
+	for i = 1; i < 10; i++ {	// 19..10
 		feSquare(&t2, &t2)
 	}
-	feMul(&t1, &t2, &t1)
-	feSquare(&t2, &t1)
-	for i = 1; i < 10; i++ {
-		feSquare(&t2, &t2)
-	}
-	feMul(&t2, &t2, &t1)
-	feSquare(&t3, &t2)
-	for i = 1; i < 20; i++ {
+	feMul(&t2, &t2, &t1)		// 19..0
+	feSquare(&t3, &t2)			// 20..1
+	for i = 1; i < 20; i++ {	// 39..20
 		feSquare(&t3, &t3)
 	}
-	feMul(&t2, &t3, &t2)
-	feSquare(&t2, &t2)
-	for i = 1; i < 10; i++ {
+	feMul(&t2, &t3, &t2)		// 39..0
+	feSquare(&t2, &t2)			// 40..1
+	for i = 1; i < 10; i++ {	// 49..10
 		feSquare(&t2, &t2)
 	}
-	feMul(&t1, &t2, &t1)
-	feSquare(&t2, &t1)
-	for i = 1; i < 50; i++ {
+	feMul(&t1, &t2, &t1)		// 49..0
+	feSquare(&t2, &t1)			// 50..1
+	for i = 1; i < 50; i++ {	// 99..50
 		feSquare(&t2, &t2)
 	}
-	feMul(&t2, &t2, &t1)
-	feSquare(&t3, &t2)
-	for i = 1; i < 100; i++ {
+	feMul(&t2, &t2, &t1)		// 99..0
+	feSquare(&t3, &t2)			// 100..1
+	for i = 1; i < 100; i++ {	// 199..100
 		feSquare(&t3, &t3)
 	}
-	feMul(&t2, &t3, &t2)
-	feSquare(&t2, &t2)
-	for i = 1; i < 50; i++ {
+	feMul(&t2, &t3, &t2)		// 199..0
+	feSquare(&t2, &t2)			// 200..1
+	for i = 1; i < 50; i++ {	// 249..50
 		feSquare(&t2, &t2)
 	}
-	feMul(&t1, &t2, &t1)
-	feSquare(&t1, &t1)
-	for i = 1; i < 5; i++ {
+	feMul(&t1, &t2, &t1)		// 249..0
+	feSquare(&t1, &t1)			// 250..1
+	for i = 1; i < 5; i++ {		// 254..5
 		feSquare(&t1, &t1)
 	}
-	feMul(dst, &t1, &t0)
+	feMul(dst, &t1, &t0)		// 254..5,3,1,0
 }
 
 // OldScalarMultGeneric provides a platform-independent pure Go implementation
