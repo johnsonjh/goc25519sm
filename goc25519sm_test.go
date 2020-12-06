@@ -9,7 +9,7 @@
 package goc25519sm_test
 
 import (
-	"bytes"
+	"crypto/subtle"
 	crand "crypto/rand"
 	"fmt"
 	"testing"
@@ -100,7 +100,7 @@ func testTestVectors(
 	for _, tv := range testVectors {
 		var got [goc25519sm.X25519Size]byte
 		err := goc25519sm.OldScalarMult(&got, &tv.In, &tv.Base)
-		if !bytes.Equal(got[:], tv.Expect[:]) || err != nil {
+		if subtle.ConstantTimeCompare(got[:], tv.Expect[:]) != 1 || err != nil {
 			t.Logf("    in = %x", tv.In)
 			t.Logf("  base = %x", tv.Base)
 			t.Logf("   got = %x", got)
@@ -149,7 +149,7 @@ func TestHighBitIgnored(t *testing.T) {
 			err,
 		)
 	}
-	if !bytes.Equal(hi0[:], hi1[:]) {
+	if subtle.ConstantTimeCompare(hi0[:], hi1[:]) != 1 {
 		t.Errorf(
 			"goc25519sm.TestHighBitIgnored failure: high bit of group point affecting result",
 		)
@@ -171,7 +171,7 @@ func TestOldScalarBaseMult1024(t *testing.T) {
 			)
 		}
 	}
-	if !bytes.Equal(curved25519Expected[:], csk[0][:]) {
+	if subtle.ConstantTimeCompare(curved25519Expected[:], csk[0][:]) != 1 {
 		t.Fatal(
 			"goc25519sm.TestOldScalarBaseMult1024 failure: ((|255| * basepoint) * basepoint)... 1024 did not match",
 		)
