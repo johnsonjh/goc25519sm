@@ -173,10 +173,10 @@ func oldScalarMultVerify(
 			X25519Size,
 		)
 	}
-	// Check for blacklisted point or scalar
-	if checkBlacklist(*scalar) || checkBlacklist(*point) {
+	// Check for blocklisted point or scalar
+	if checkBlocklist(*scalar) || checkBlocklist(*point) {
 		return fmt.Errorf(
-			"\ngoc25519sm.oldScalarMultVerify.checkBlacklist FAILURE:\n	scalar=%v\n	point=%v",
+			"\ngoc25519sm.oldScalarMultVerify.checkBlocklist FAILURE:\n	scalar=%v\n	point=%v",
 			*scalar,
 			*point,
 		)
@@ -285,8 +285,8 @@ var (
 	}
 )
 
-// blacklist from https://eprint.iacr.org/2017/806.pdf
-var blacklist = [][X25519Size]byte{
+// blocklist from https://eprint.iacr.org/2017/806.pdf
+var blocklist = [][X25519Size]byte{
 	{
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -372,21 +372,21 @@ var blacklist = [][X25519Size]byte{
 	},
 }
 
-// checkBlacklist verifies input is not blacklisted
-func checkBlacklist(
+// checkBlocklist verifies input is not blocklisted
+func checkBlocklist(
 	input [X25519Size]byte,
 ) bool {
-	isBlacklisted := false
-	for _, blackList := range blacklist {
+	isBlocklisted := false
+	for _, blockList := range blocklist {
 		if csubtle.ConstantTimeCompare(
 			input[:],
-			blackList[:],
+			blockList[:],
 		) == 1 {
-			isBlacklisted = true
+			isBlocklisted = true
 			break
 		}
 	}
-	return isBlacklisted
+	return isBlocklisted
 }
 
 // init initializes the goc25519sm package
