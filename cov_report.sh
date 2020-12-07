@@ -46,7 +46,7 @@ fi
 
 export CGO_ENABLED=1
 export TEST_TAGS='-tags=amd64,purego'
-export TEST_FLAGS="${TEST_TAGS} -count=1 -covermode=atomic -cover -cpus=1 -parallel=1 -race -trimpath"
+export TEST_FLAGS="${TEST_TAGS} -count=1 -covermode=atomic -cover -cpu=1 -parallel=1 -race -trimpath"
 export GOFLAGS='-tags=osnetgo,osusergo'
 # shellcheck disable=SC2155
 export GOC_TARGETS="$(go list ./... | grep -v test | sort | uniq)"
