@@ -18,35 +18,62 @@ type fieldElement [10]int32
 
 var zero fieldElement
 
-func feZero(fe *fieldElement) {
-	copy(fe[:], zero[:])
+func feZero(
+	fe *fieldElement,
+) {
+	copy(
+		fe[:],
+		zero[:],
+	)
 }
 
-func feOne(fe *fieldElement) {
-	feZero(fe)
+func feOne(
+	fe *fieldElement,
+) {
+	feZero(
+		fe,
+	)
 	fe[0] = 1
 }
 
-func feAdd(dst, a, b *fieldElement) {
+func feAdd(
+	dst,
+	a,
+	b *fieldElement,
+) {
 	for i := range dst {
 		dst[i] = a[i] + b[i]
 	}
 }
 
-func feSub(dst, a, b *fieldElement) {
+func feSub(
+	dst,
+	a,
+	b *fieldElement,
+) {
 	for i := range dst {
 		dst[i] = a[i] - b[i]
 	}
 }
 
-func feCopy(dst, src *fieldElement) {
-	copy(dst[:], src[:])
+func feCopy(
+	dst,
+	src *fieldElement,
+) {
+	copy(
+		dst[:],
+		src[:],
+	)
 }
 
 // feCSwap replaces (f,g) with (g,f) if b == 1;
 // replaces (f,g) with (f,g) if b == 0.
 // Preconditions: b in {0,1}.
-func feCSwap(f, g *fieldElement, b int32) {
+func feCSwap(
+	f,
+	g *fieldElement,
+	b int32,
+) {
 	b = -b
 	for i := range f {
 		t := b & (f[i] ^ g[i])
@@ -55,14 +82,19 @@ func feCSwap(f, g *fieldElement, b int32) {
 	}
 }
 
-func load3(scalar []byte) int64 {
+func load3(
+	scalar []byte,
+) int64 {
 	var r int64
 	r = int64(scalar[0])
 	r |= int64(scalar[1]) << 8
 	r |= int64(scalar[2]) << 16
 	return r
 }
-func load4(scalar []byte) int64 {
+
+func load4(
+	scalar []byte,
+) int64 {
 	var r int64
 	r = int64(scalar[0])
 	r |= int64(scalar[1]) << 8
@@ -71,17 +103,40 @@ func load4(scalar []byte) int64 {
 	return r
 }
 
-func feFromBytes(dst *fieldElement, src *[X25519Size]byte) {
-	h0 := load4(src[:])
-	h1 := load3(src[4:]) << 6
-	h2 := load3(src[7:]) << 5
-	h3 := load3(src[10:]) << 3
-	h4 := load3(src[13:]) << 2
-	h5 := load4(src[16:])
-	h6 := load3(src[20:]) << 7
-	h7 := load3(src[23:]) << 5
-	h8 := load3(src[26:]) << 4
-	h9 := (load3(src[29:]) & 0x7fffff) << 2
+func feFromBytes(
+	dst *fieldElement,
+	src *[X25519Size]byte,
+) {
+	h0 := load4(
+		src[:],
+	)
+	h1 := load3(
+		src[4:],
+	) << 6
+	h2 := load3(
+		src[7:],
+	) << 5
+	h3 := load3(
+		src[10:],
+	) << 3
+	h4 := load3(
+		src[13:],
+	) << 2
+	h5 := load4(
+		src[16:],
+	)
+	h6 := load3(
+		src[20:],
+	) << 7
+	h7 := load3(
+		src[23:],
+	) << 5
+	h8 := load3(
+		src[26:],
+	) << 4
+	h9 := (load3(
+		src[29:],
+	) & 0x7fffff) << 2
 	var carry [10]int64
 	carry[9] = (h9 + 1<<24) >> 25
 	h0 += carry[9] * 19
@@ -143,7 +198,10 @@ func feFromBytes(dst *fieldElement, src *[X25519Size]byte) {
 //   Then 0<x<2^255 so floor(2^(-255)x) = 0 so floor(q+2^(-255)x) = q.
 //   Have q+2^(-255)x = 2^(-255)(h + 19 2^(-25) h9 + 2^(-1))
 //   So floor(2^(-255)(h + 19 2^(-25) h9 + 2^(-1))) = q.
-func feToBytes(s *[X25519Size]byte, h *fieldElement) {
+func feToBytes(
+	s *[X25519Size]byte,
+	h *fieldElement,
+) {
 	var carry [10]int32
 	q := (19*h[9] + (1 << 24)) >> 25
 	q = (h[0] + q) >> 26
@@ -249,7 +307,11 @@ func feToBytes(s *[X25519Size]byte, h *fieldElement) {
 //   and vectorizable. Can get away with 11 carries, but then data
 //   flow is much deeper.
 // * With tighter constraints on inputs, can squeeze carries into int32.
-func feMul(h, f, g *fieldElement) {
+func feMul(
+	h,
+	f,
+	g *fieldElement,
+) {
 	f0 := f[0]
 	f1 := f[1]
 	f2 := f[2]
@@ -448,7 +510,10 @@ func feMul(h, f, g *fieldElement) {
 //    |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
 // Postconditions:
 //    |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
-func feSquare(h, f *fieldElement) {
+func feSquare(
+	h,
+	f *fieldElement,
+) {
 	f0 := f[0]
 	f1 := f[1]
 	f2 := f[2]
@@ -591,7 +656,10 @@ func feSquare(h, f *fieldElement) {
 //    |f| bounded by 1.1*2^26,1.1*2^25,1.1*2^26,1.1*2^25,etc.
 // Postconditions:
 //    |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
-func feMul121666(h, f *fieldElement) {
+func feMul121666(
+	h,
+	f *fieldElement,
+) {
 	h0 := int64(f[0]) * 121666
 	h1 := int64(f[1]) * 121666
 	h2 := int64(f[2]) * 121666
@@ -645,58 +713,165 @@ func feMul121666(h, f *fieldElement) {
 	h[9] = int32(h9)
 }
 
-func feInvert(dst, z *fieldElement) {
+func feInvert(
+	dst,
+	z *fieldElement,
+) {
 	var t0, t1, t2, t3 fieldElement
 	var i int
-	feSquare(&t0, z)			// 2^1
-	feSquare(&t1, &t0)			// 2^2
-	for i = 1; i < 2; i++ {		// 2^3
-		feSquare(&t1, &t1)
-	}
-	feMul(&t1, z, &t1)			// 2^3 + 2^0
-	feMul(&t0, &t0, &t1)		// 2^3 + 2^1 + 2^0
-	feSquare(&t2, &t0)			// 2^4 + 2^2 + 2^1
-	feMul(&t1, &t1, &t2)		// 2^4 + 2^3 + 2^2 + 2^1 + 2^0
-	feSquare(&t2, &t1)			// 5,4,3,2,1
-	for i = 1; i < 5; i++ {		// 9,8,7,6,5
-		feSquare(&t2, &t2)
-	}
-	feMul(&t1, &t2, &t1)		// 9,8,7,6,5,4,3,2,1,0
-	feSquare(&t2, &t1)			// 10..1
-	for i = 1; i < 10; i++ {	// 19..10
-		feSquare(&t2, &t2)
-	}
-	feMul(&t2, &t2, &t1)		// 19..0
-	feSquare(&t3, &t2)			// 20..1
-	for i = 1; i < 20; i++ {	// 39..20
-		feSquare(&t3, &t3)
-	}
-	feMul(&t2, &t3, &t2)		// 39..0
-	feSquare(&t2, &t2)			// 40..1
-	for i = 1; i < 10; i++ {	// 49..10
-		feSquare(&t2, &t2)
-	}
-	feMul(&t1, &t2, &t1)		// 49..0
-	feSquare(&t2, &t1)			// 50..1
-	for i = 1; i < 50; i++ {	// 99..50
-		feSquare(&t2, &t2)
-	}
-	feMul(&t2, &t2, &t1)		// 99..0
-	feSquare(&t3, &t2)			// 100..1
-	for i = 1; i < 100; i++ {	// 199..100
-		feSquare(&t3, &t3)
-	}
-	feMul(&t2, &t3, &t2)		// 199..0
-	feSquare(&t2, &t2)			// 200..1
-	for i = 1; i < 50; i++ {	// 249..50
-		feSquare(&t2, &t2)
-	}
-	feMul(&t1, &t2, &t1)		// 249..0
-	feSquare(&t1, &t1)			// 250..1
-	for i = 1; i < 5; i++ {		// 254..5
-		feSquare(&t1, &t1)
-	}
-	feMul(dst, &t1, &t0)		// 254..5,3,1,0
+	feSquare(
+		&t0,
+		z,
+	) // 2^1
+	feSquare(
+		&t1,
+		&t0,
+	) // 2^2
+	for i = 1; i < 2; i++ {
+		feSquare(
+			&t1,
+			&t1,
+		)
+	} // 2^3
+	feMul(
+		&t1,
+		z,
+		&t1,
+	) // 2^3 + 2^0
+	feMul(
+		&t0,
+		&t0,
+		&t1,
+	) // 2^3 + 2^1 + 2^0
+	feSquare(
+		&t2,
+		&t0,
+	) // 2^4 + 2^2 + 2^1
+	feMul(
+		&t1,
+		&t1,
+		&t2,
+	) // 2^4 + 2^3 + 2^2 + 2^1 + 2^0
+	feSquare(
+		&t2,
+		&t1,
+	) // 5,4,3,2,1
+	for i = 1; i < 5; i++ {
+		feSquare(
+			&t2,
+			&t2,
+		)
+	} // 9,8,7,6,5
+	feMul(
+		&t1,
+		&t2,
+		&t1,
+	) // 9,8,7,6,5,4,3,2,1,0
+	feSquare(
+		&t2,
+		&t1,
+	) // 10..1
+	for i = 1; i < 10; i++ {
+		feSquare(
+			&t2,
+			&t2,
+		)
+	} // 19..10
+	feMul(
+		&t2,
+		&t2,
+		&t1,
+	) // 19..0
+	feSquare(
+		&t3,
+		&t2,
+	) // 20..1
+	for i = 1; i < 20; i++ {
+		feSquare(
+			&t3,
+			&t3,
+		)
+	} // 39..20
+	feMul(
+		&t2,
+		&t3,
+		&t2,
+	) // 39..0
+	feSquare(
+		&t2,
+		&t2,
+	) // 40..1
+	for i = 1; i < 10; i++ {
+		feSquare(
+			&t2,
+			&t2,
+		)
+	} // 49..10
+	feMul(
+		&t1,
+		&t2,
+		&t1,
+	) // 49..0
+	feSquare(
+		&t2,
+		&t1,
+	) // 50..1
+	for i = 1; i < 50; i++ {
+		feSquare(
+			&t2,
+			&t2,
+		)
+	} // 99..50
+	feMul(
+		&t2,
+		&t2,
+		&t1,
+	) // 99..0
+	feSquare(
+		&t3,
+		&t2,
+	) // 100..1
+	for i = 1; i < 100; i++ {
+		feSquare(
+			&t3,
+			&t3,
+		)
+	} // 199..100
+	feMul(
+		&t2,
+		&t3,
+		&t2,
+	) // 199..0
+	feSquare(
+		&t2,
+		&t2,
+	) // 200..1
+	for i = 1; i < 50; i++ {
+		feSquare(
+			&t2,
+			&t2,
+		)
+	} // 249..50
+	feMul(
+		&t1,
+		&t2,
+		&t1,
+	) // 249..0
+	feSquare(
+		&t1,
+		&t1,
+	) // 250..1
+	for i = 1; i < 5; i++ {
+		feSquare(
+			&t1,
+			&t1,
+		)
+	} // 254..5
+	feMul(
+		dst,
+		&t1,
+		&t0,
+	) // 254..5,3,1,0
 }
 
 // OldScalarMultGeneric provides a platform-independent pure Go implementation
@@ -705,50 +880,160 @@ func feInvert(dst, z *fieldElement) {
 // implementators an alternative if they encounter any trouble with an
 // optimized version and wish to call the pure Go implementation explicitly,
 // and should not be needed for normal use.
-func OldScalarMultGeneric(dst, scalar, point *[X25519Size]byte) error {
+func OldScalarMultGeneric(
+	dst,
+	scalar,
+	point *[X25519Size]byte,
+) error {
 	var e [X25519Size]byte
 	// Dubious to perform clamp at this stage,
 	// but behavior matches that of libsodium
-	copy(e[:], scalar[:])
+	copy(
+		e[:],
+		scalar[:],
+	)
 	e[0] &= 248
 	e[31] &= 127
 	e[31] |= 64
 	var x1, x2, z2, x3, z3, tmp0, tmp1 fieldElement
-	feFromBytes(&x1, point)
-	feOne(&x2)
-	feCopy(&x3, &x1)
-	feOne(&z3)
+	feFromBytes(
+		&x1,
+		point,
+	)
+	feOne(
+		&x2,
+	)
+	feCopy(
+		&x3,
+		&x1,
+	)
+	feOne(
+		&z3,
+	)
 	swap := int32(0)
 	for pos := 254; pos >= 0; pos-- {
 		b := e[pos/8] >> uint(pos&7)
 		b &= 1
 		swap ^= int32(b)
-		feCSwap(&x2, &x3, swap)
-		feCSwap(&z2, &z3, swap)
+		feCSwap(
+			&x2,
+			&x3,
+			swap,
+		)
+		feCSwap(
+			&z2,
+			&z3,
+			swap,
+		)
 		swap = int32(b)
-		feSub(&tmp0, &x3, &z3)
-		feSub(&tmp1, &x2, &z2)
-		feAdd(&x2, &x2, &z2)
-		feAdd(&z2, &x3, &z3)
-		feMul(&z3, &tmp0, &x2)
-		feMul(&z2, &z2, &tmp1)
-		feSquare(&tmp0, &tmp1)
-		feSquare(&tmp1, &x2)
-		feAdd(&x3, &z3, &z2)
-		feSub(&z2, &z3, &z2)
-		feMul(&x2, &tmp1, &tmp0)
-		feSub(&tmp1, &tmp1, &tmp0)
-		feSquare(&z2, &z2)
-		feMul121666(&z3, &tmp1)
-		feSquare(&x3, &x3)
-		feAdd(&tmp0, &tmp0, &z3)
-		feMul(&z3, &x1, &z2)
-		feMul(&z2, &tmp1, &tmp0)
+		feSub(
+			&tmp0,
+			&x3,
+			&z3,
+		)
+		feSub(
+			&tmp1,
+			&x2,
+			&z2,
+		)
+		feAdd(
+			&x2,
+			&x2,
+			&z2,
+		)
+		feAdd(
+			&z2,
+			&x3,
+			&z3,
+		)
+		feMul(
+			&z3,
+			&tmp0,
+			&x2,
+		)
+		feMul(
+			&z2,
+			&z2,
+			&tmp1,
+		)
+		feSquare(
+			&tmp0,
+			&tmp1,
+		)
+		feSquare(
+			&tmp1,
+			&x2,
+		)
+		feAdd(
+			&x3,
+			&z3,
+			&z2,
+		)
+		feSub(
+			&z2,
+			&z3,
+			&z2,
+		)
+		feMul(
+			&x2,
+			&tmp1,
+			&tmp0,
+		)
+		feSub(
+			&tmp1,
+			&tmp1,
+			&tmp0,
+		)
+		feSquare(
+			&z2,
+			&z2,
+		)
+		feMul121666(
+			&z3,
+			&tmp1,
+		)
+		feSquare(
+			&x3,
+			&x3,
+		)
+		feAdd(
+			&tmp0,
+			&tmp0,
+			&z3,
+		)
+		feMul(
+			&z3,
+			&x1,
+			&z2,
+		)
+		feMul(
+			&z2,
+			&tmp1,
+			&tmp0,
+		)
 	}
-	feCSwap(&x2, &x3, swap)
-	feCSwap(&z2, &z3, swap)
-	feInvert(&z2, &z2)
-	feMul(&x2, &x2, &z2)
-	feToBytes(dst, &x2)
+	feCSwap(
+		&x2,
+		&x3,
+		swap,
+	)
+	feCSwap(
+		&z2,
+		&z3,
+		swap,
+	)
+	feInvert(
+		&z2,
+		&z2,
+	)
+	feMul(
+		&x2,
+		&x2,
+		&z2,
+	)
+	feToBytes(
+		dst,
+		&x2,
+	)
 	return nil
 }
