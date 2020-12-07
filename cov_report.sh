@@ -13,9 +13,9 @@
 
 # Abort and inform in the case of csh or tcsh as sh.
 # shellcheck disable=SC2046,SC2006,SC2116,SC2065
-test _`echo asdf 2>/dev/null` != _asdf >/dev/null &&\
-    printf '%s\n' "Error: csh as sh is unsupported." &&\
-    exit 1
+test _$(echo asdf 2>/dev/null) != _asdf >/dev/null &&
+	printf '%s\n' "Error: csh as sh is unsupported." &&
+	exit 1
 
 cleanUp() {
 	printf '\n%s\n' "Running cleanup tasks." >&2 || true :
@@ -27,9 +27,10 @@ cleanUp() {
 }
 
 global_trap() {
-    err=${?}
-    trap - EXIT; trap '' EXIT INT TERM ABRT ALRM HUP
-    cleanUp
+	err=${?}
+	trap - EXIT
+	trap '' EXIT INT TERM ABRT ALRM HUP
+	cleanUp
 }
 trap 'global_trap $?' EXIT
 trap 'err=$?; global_trap; exit $?' ABRT ALRM HUP TERM
@@ -39,9 +40,9 @@ trap '' EMT IO LOST SYS URG >/dev/null 2>&1 || true :
 
 set -o pipefail >/dev/null 2>&1
 if [ ! -f "./.goc25519sm_root" ]; then
-	printf '\n%s\n' "You must run this tool from the root directory"	>&2
-	printf '%s\n'   "of your local goc25519sm source tree or checkout."	>&2
-	exit 1 || :;
+	printf '\n%s\n' "You must run this tool from the root directory" >&2
+	printf '%s\n' "of your local goc25519sm source tree or checkout." >&2
+	exit 1 || :
 fi
 
 export CGO_ENABLED=1
@@ -51,40 +52,47 @@ export GOFLAGS='-tags=osnetgo,osusergo'
 # shellcheck disable=SC2155
 export GOC_TARGETS="$(go list ./... | grep -v test | sort | uniq)"
 
-type gocov 1>/dev/null 2>&1; # shellcheck disable=SC2181
+type gocov 1>/dev/null 2>&1 # shellcheck disable=SC2181
 if [ "${?}" -ne 0 ]; then
-	printf '\n%s\n' "This script requires the gocov tool."           >&2
-	printf '%s\n'   "You may obtain it with the following command:"  >&2
-	printf '%s\n\n' "\"go get github.com/axw/gocov/gocov\""          >&2
-	exit 1 || :;
+	printf '\n%s\n' "This script requires the gocov tool." >&2
+	printf '%s\n' "You may obtain it with the following command:" >&2
+	printf '%s\n\n' "\"go get github.com/axw/gocov/gocov\"" >&2
+	exit 1 || :
 fi
 
-cleanUp || true && \
-unset="Error: Testing flags are unset, aborting." &&\
+cleanUp || true &&
+	unset="Error: Testing flags are unset, aborting." &&
 	export unset
 # shellcheck disable=SC2086
-(date 2>/dev/null; gocov test ${TEST_FLAGS:?${unset:?}} ${GOC_TARGETS} > gocov_report_goc.json && \
-	gocov report < gocov_report_goc.json > gocov_report_goc.txt) || \
-	{ printf '\n%s\n' "gocov failed complete successfully." >&2
-		exit 1 || :; };
+(
+	date 2>/dev/null
+	gocov test ${TEST_FLAGS:?${unset:?}} ${GOC_TARGETS} >gocov_report_goc.json &&
+		gocov report <gocov_report_goc.json >gocov_report_goc.txt
+) ||
+	{
+		printf '\n%s\n' "gocov failed complete successfully." >&2
+		exit 1 || :
+	}
 # shellcheck disable=SC2086
 
-type gocov-html 1>/dev/null 2>&1; # shellcheck disable=SC2181
+type gocov-html 1>/dev/null 2>&1 # shellcheck disable=SC2181
 if [ "${?}" -ne 0 ]; then
 	printf '%\n%s\n' "This script optionally utilizes gocov-html." >&2
-    printf '%s\n'    "You may obtain it with the following command:" >&2
-    printf '%s\n\n'  "\"go get https://github.com/matm/gocov-html\"" >&2
-	exit 1 || :;
+	printf '%s\n' "You may obtain it with the following command:" >&2
+	printf '%s\n\n' "\"go get https://github.com/matm/gocov-html\"" >&2
+	exit 1 || :
 fi
-(gocov-html < gocov_report_goc.json > gocov_report_goc.html) || \
-	{ printf '\n%s\n' "gocov-html failed to complete successfully." >&2
-		exit 1 || :; };
+(gocov-html <gocov_report_goc.json >gocov_report_goc.html) ||
+	{
+		printf '\n%s\n' "gocov-html failed to complete successfully." >&2
+		exit 1 || :
+	}
 
 if [ -x "${HOME}/.goc25519sm.cov.local" ]; then
 	printf '%s\n' "Local script started"
-	( exec ${HOME}/.goc25519sm.cov.local )
+	(exec "${HOME}"/.goc25519sm.cov.local)
 	printf '%s\n' "Local script ended"
 fi
 
-mkdir -p ./cov && mv -f ./gocov_report_* ./cov && \
-printf '\n%s\n' "Done - output is located at ./cov"
+mkdir -p ./cov && mv -f ./gocov_report_* ./cov &&
+	printf '\n%s\n' "Done - output is located at ./cov"
