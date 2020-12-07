@@ -9,8 +9,8 @@
 package goc25519sm_test
 
 import (
-	"crypto/subtle"
 	crand "crypto/rand"
+	csubtle "crypto/subtle"
 	"fmt"
 	"testing"
 
@@ -80,32 +80,78 @@ var curved25519Expected = [goc25519sm.X25519Size]byte{
 	0xd5, 0x19, 0xb6, 0xf1, 0xfb, 0x96, 0xd6, 0x04,
 }
 
-func TestTestVectors(t *testing.T) {
-	defer leak.VerifyNone(t)
+func TestTestVectors(
+	t *testing.T,
+) {
+	defer leak.VerifyNone(
+		t,
+	)
 	t.Run(
 		"PureGo",
-		func(t *testing.T) { testTestVectors(t, goc25519sm.OldScalarMultGeneric) },
+		func(
+			t *testing.T,
+		) {
+			testTestVectors(
+				t,
+				goc25519sm.OldScalarMultGeneric,
+			)
+		},
 	)
 	t.Run(
 		"Native",
-		func(t *testing.T) { testTestVectors(t, goc25519sm.OldScalarMult) },
+		func(
+			t *testing.T,
+		) {
+			testTestVectors(
+				t,
+				goc25519sm.OldScalarMult,
+			)
+		},
 	)
 }
 
 func testTestVectors(
 	t *testing.T,
-	OldScalarMult func(dst, scalar, point *[goc25519sm.X25519Size]byte) error,
+	OldScalarMult func(
+		dst,
+		scalar,
+		point *[goc25519sm.X25519Size]byte,
+	) error,
 ) {
-	defer leak.VerifyNone(t)
+	defer leak.VerifyNone(
+		t,
+	)
 	for _, tv := range testVectors {
 		var got [goc25519sm.X25519Size]byte
-		err := goc25519sm.OldScalarMult(&got, &tv.In, &tv.Base)
-		if subtle.ConstantTimeCompare(got[:], tv.Expect[:]) != 1 || err != nil {
-			t.Logf("    in = %x", tv.In)
-			t.Logf("  base = %x", tv.Base)
-			t.Logf("   got = %x", got)
-			t.Logf("expect = %x", tv.Expect)
-			t.Logf("   err = %v", err)
+		err := goc25519sm.OldScalarMult(
+			&got,
+			&tv.In,
+			&tv.Base,
+		)
+		if csubtle.ConstantTimeCompare(
+			got[:],
+			tv.Expect[:],
+		) != 1 || err != nil {
+			t.Logf(
+				"    in = %v",
+				tv.In,
+			)
+			t.Logf(
+				"  base = %v",
+				tv.Base,
+			)
+			t.Logf(
+				"   got = %v",
+				got,
+			)
+			t.Logf(
+				"expect = %v",
+				tv.Expect,
+			)
+			t.Logf(
+				"   err = %v",
+				err,
+			)
 			t.Fail()
 		}
 	}
@@ -114,81 +160,126 @@ func testTestVectors(
 // TestHighBitIgnored tests the following requirement in RFC-7748:
 //  "When receiving such an array, implementations of X25519
 //   ... MUST mask the most significant bit in the final byte."
-func TestHighBitIgnored(t *testing.T) {
-	defer leak.VerifyNone(t)
+func TestHighBitIgnored(
+	t *testing.T,
+) {
+	defer leak.VerifyNone(
+		t,
+	)
 	var err error
 	var s, u [goc25519sm.X25519Size]byte
-	_, err = crand.Read(s[:])
+	_, err = crand.Read(
+		s[:],
+	)
 	if err != nil {
 		t.Errorf(
-			"goc25519sm.TestHighBitIgnored.crand.Read(s[:]) failure: %v",
+			"\ngoc25519sm_test.TestHighBitIgnored.crand.Read(s[:]) FAILURE:\n	%v",
 			err,
 		)
 	}
-	_, err = crand.Read(u[:])
+	_, err = crand.Read(
+		u[:],
+	)
 	if err != nil {
 		t.Errorf(
-			"goc25519sm.TestHighBitIgnored.crand.Read(u[:]) failure: %v",
+			"\ngoc25519sm_test.TestHighBitIgnored.crand.Read(u[:]) FAILURE:\n	%v",
 			err,
 		)
 	}
 	var hi0, hi1 [goc25519sm.X25519Size]byte
 	u[31] &= 0x7f
-	err = goc25519sm.OldScalarMult(&hi0, &s, &u)
+	err = goc25519sm.OldScalarMult(
+		&hi0,
+		&s,
+		&u,
+	)
 	if err != nil {
 		t.Errorf(
-			"goc25519sm.TestHighBitIgnored.OldScalarMult failure: %v",
+			"\ngoc25519sm_test.TestHighBitIgnored.OldScalarMult FAILURE:\n	hi0=%v\n	s=%v\n	u=%v\n	%v",
+			&hi0,
+			&s,
+			&u,
 			err,
 		)
 	}
 	u[31] |= 0x80
-	err = goc25519sm.OldScalarMult(&hi1, &s, &u)
+	err = goc25519sm.OldScalarMult(
+		&hi1,
+		&s,
+		&u,
+	)
 	if err != nil {
 		t.Errorf(
-			"goc25519sm.TestHighBitIgnored.OldScalarMult faulure: %v",
+			"\ngoc25519sm_test.TestHighBitIgnored.OldScalarMult FAILURE:\n	hi1=%v\n	s=%v\n	u=%v\n	%v",
+			&hi1,
+			&s,
+			&u,
 			err,
 		)
 	}
-	if subtle.ConstantTimeCompare(hi0[:], hi1[:]) != 1 {
+	if csubtle.ConstantTimeCompare(
+		hi0[:],
+		hi1[:],
+	) != 1 {
 		t.Errorf(
-			"goc25519sm.TestHighBitIgnored failure: high bit of group point affecting result",
+			"\ngoc25519sm_test.TestHighBitIgnored FAILURE:\n	ERROR: high bit of group erronously point affecting result",
 		)
 	}
 }
 
-func TestOldScalarBaseMult1024(t *testing.T) {
-	defer leak.VerifyNone(t)
+func TestOldScalarBaseMult1024(
+	t *testing.T,
+) {
+	defer leak.VerifyNone(
+		t,
+	)
 	var err error
 	csk := [2][goc25519sm.X25519Size]byte{
 		{255},
 	}
 	for i := 0; i < 1024; i++ {
-		err = goc25519sm.OldScalarBaseMult(&csk[(i&1)^1], &csk[i&1])
+		err = goc25519sm.OldScalarBaseMult(
+			&csk[(i&1)^1],
+			&csk[i&1],
+		)
 		if err != nil {
 			t.Errorf(
-				"goc25519sm.TestOldScalarBaseMult1024.OldScalarBaseMult failure: %v",
+				"\ngoc25519sm_test.TestOldScalarBaseMult1024.OldScalarBaseMult FAILURE:\n	csk[(%v&1)^1]=%v\n	csk[%v&1]=%v\n	%v",
+				i,
+				&csk[(i&1)^1],
+				i,
+				&csk[i&1],
 				err,
 			)
 		}
 	}
-	if subtle.ConstantTimeCompare(curved25519Expected[:], csk[0][:]) != 1 {
+	if csubtle.ConstantTimeCompare(
+		curved25519Expected[:],
+		csk[0][:],
+	) != 1 {
 		t.Fatal(
-			"goc25519sm.TestOldScalarBaseMult1024 failure: ((|255| * basepoint) * basepoint)... 1024 did not match",
+			"\ngoc25519sm_test.TestOldScalarBaseMult1024 FAILURE:\n	ERROR: ((|255| * basepoint) * basepoint)... 1024 did not match",
 		)
 	}
 }
 
-func TestBasepointMolestation(t *testing.T) {
-	defer leak.VerifyNone(t)
+func TestBasepointMolestation(
+	t *testing.T,
+) {
+	defer leak.VerifyNone(
+		t,
+	)
 	var err error
 	oBasepoint := goc25519sm.Basepoint
-	err = goc25519sm.OldScalarVerifyBasepoint(goc25519sm.Basepoint)
+	err = goc25519sm.OldScalarVerifyBasepoint(
+		goc25519sm.Basepoint,
+	)
 	if err != nil {
 		t.Fatal(
 			fmt.Sprintf(
-				"goc25519sm.TestBasepointMolestation.OldScalarVerifyBasepoint failure: falsely detected molestation of pristine Basepoint: got %v, wanted %v",
-				err,
+				"\ngoc25519sm_test.TestBasepointMolestation.OldScalarVerifyBasepoint FAILURE\n	ERROR: falsely detected molestation of pristine Basepoint\n		wanted %v\n		got %v",
 				goc25519sm.Basepoint,
+				err,
 			),
 		)
 	}
@@ -198,75 +289,107 @@ func TestBasepointMolestation(t *testing.T) {
 		0x17, 0x18, 0x19, 0x20, 0x21, 0x22, 0x23, 0x24,
 		0x25, 0x26, 0x27, 0x28, 0x29, 0x30, 0x31, 0x32,
 	}
-	err = goc25519sm.OldScalarVerifyBasepoint(goc25519sm.Basepoint)
+	err = goc25519sm.OldScalarVerifyBasepoint(
+		goc25519sm.Basepoint,
+	)
 	if err == nil {
 		t.Fatal(
 			fmt.Sprintf(
-				"goc25519sm.TestBasepointMolestation.OldScalarVerifyBasepoint failure: failed to detect Basepoint molestation: got %v, wanted %v",
-				goc25519sm.Basepoint,
+				"\ngoc25519sm_test.TestBasepointMolestation.OldScalarVerifyBasepoint FAILURE:\n	ERROR: failed to detect Basepoint molestation\n		wanted %v\n		got %v",
 				oBasepoint,
+				goc25519sm.Basepoint,
 			),
 		)
 	}
 	goc25519sm.Basepoint = oBasepoint
 }
 
-func TestOldScalarBaseMult200(t *testing.T) {
-	defer leak.VerifyNone(t)
+func TestOldScalarBaseMult200(
+	t *testing.T,
+) {
+	defer leak.VerifyNone(
+		t,
+	)
 	var err error
 	var a, b [goc25519sm.X25519Size]byte
 	in := &a
 	out := &b
-	a[0] = 1
+	a[0] = 2
 	for i := 0; i < 200; i++ {
-		err = goc25519sm.OldScalarBaseMult(out, in)
+		err = goc25519sm.OldScalarBaseMult(
+			out,
+			in,
+		)
 		if err != nil {
 			t.Fatal(
-				fmt.Sprintf("goc25519sm.TestOldScalarBaseMult200.OldScalarBaseMult failure: %v",
+				fmt.Sprintf(
+					"\ngoc25519sm_test.TestOldScalarBaseMult200.OldScalarBaseMult FAILURE:\n	in=%v\n	out=%v\n	%v",
+					in,
+					out,
 					err,
 				),
 			)
 		}
 		in, out = out, in
 	}
-	result := fmt.Sprintf("%x", in[:])
+	result := fmt.Sprintf(
+		"%x",
+		in[:],
+	)
 	if result != expectedHex {
 		t.Errorf(
-			"goc25519sm.TestOldScalarBaseMult200 failure: incorrect result: got %s, want %s",
-			result,
+			"\ngoc25519sm_test.TestOldScalarBaseMult200 FAILURE:\n	wanted %v\n	got %v",
 			expectedHex,
+			result,
 		)
 	}
 }
 
-func TestLowOrderPoints(t *testing.T) {
-	defer leak.VerifyNone(t)
+func TestLowOrderPoints(
+	t *testing.T,
+) {
+	defer leak.VerifyNone(
+		t,
+	)
 	var x [goc25519sm.X25519Size]byte
 	var err error
-	scalar := make([]byte, goc25519sm.X25519Size)
+	scalar := make(
+		[]byte,
+		goc25519sm.X25519Size,
+	)
 	tscalar := scalar
-	copy(x[:], tscalar)
-	if _, err = crand.Read(tscalar); err != nil {
+	copy(
+		x[:],
+		tscalar,
+	)
+	if _, err = crand.Read(
+		tscalar,
+	); err != nil {
 		t.Fatal(
 			fmt.Sprintf(
-				"goc25519sm.TestLowOrderPoints failure: crand.Read failure: %v",
+				"\ngoc25519sm_test.TestLowOrderPoints.crand.Read FAILURE:\n	%v",
 				err,
 			),
 		)
 	}
 	for i, p := range lowOrderPoints {
 		var out [goc25519sm.X25519Size]byte
-		err = goc25519sm.OldScalarMult(&out, &x, &p)
+		err = goc25519sm.OldScalarMult(
+			&out,
+			&x,
+			&p,
+		)
 		if err == nil {
 			t.Errorf(
-				"goc25519sm.TestLowOrderPoints.OldScalarMult failure: %d: expected error, got nil",
+				"\ngoc25519sm_test.TestLowOrderPoints.OldScalarMult FAILURE:\n	%v expected an error\n	got %v",
 				i,
+				err,
 			)
 		}
 		var allZeroOutput [goc25519sm.X25519Size]byte
 		if out != allZeroOutput {
 			t.Errorf(
-				"goc25519sm.TestLowOrderPoints.OldScalarMult failure: %d: expected all zero output, got %x",
+				"\ngoc25519sm_test.TestLowOrderPoints.OldScalarMult FAILURE:\n	%v expected all zero output\n	got %v",
 				i,
 				out,
 			)

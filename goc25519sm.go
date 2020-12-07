@@ -81,22 +81,45 @@ import (
 )
 
 const (
-	// X25519Size is the fixed (32-byte, 256-bit) size of
+	// X25519Size is the fixed (32-bytes, 256-bit) size of the
 	// 'scalar', 'point', 'base', and the size of the output, 'dst'.
 	X25519Size = 32
 )
 
 // OldScalarMult sets 'dst' to the product ('scalar' * 'point'),
 // returning an error in the case of validation failures.
-func OldScalarMult(dst, scalar, point *[X25519Size]byte) error {
-	var err error
-	err = oldScalarMult(dst, scalar, point)
+func OldScalarMult(
+	dst,
+	scalar,
+	point *[X25519Size]byte,
+) error {
+	err := oldScalarMult(
+		dst,
+		scalar,
+		point,
+	)
 	if err != nil {
-		return fmt.Errorf("goc25519sm.OldScalarMult.oldScalarMult failure: %v", err)
+		return fmt.Errorf(
+			"\ngoc25519sm.OldScalarMult.oldScalarMult FAILURE:\n	dst=%v\n	scalar=%v\n	point=%v\n	%v",
+			*dst,
+			*scalar,
+			*point,
+			err,
+		)
 	}
-	err = oldScalarMultVerify(dst, scalar, point)
+	err = oldScalarMultVerify(
+		dst,
+		scalar,
+		point,
+	)
 	if err != nil {
-		return fmt.Errorf("goc25519sm.OldScalarMult.oldScalarMultVerify failure: %v", err)
+		return fmt.Errorf(
+			"\ngoc25519sm.OldScalarMult.oldScalarMultVerify FAILURE:\n	dst=%v\n	scalar=%v\n	point=%v\n	%v",
+			*dst,
+			*scalar,
+			*point,
+			err,
+		)
 	}
 	return nil
 }
@@ -104,21 +127,38 @@ func OldScalarMult(dst, scalar, point *[X25519Size]byte) error {
 // OldScalarBaseMult sets 'dst' to the product of ('scalar' * 'base'),
 // where base is the canonical Curve25519 generator, returning an
 // error in the case of validation failures.
-func OldScalarBaseMult(dst, scalar *[X25519Size]byte) error {
-	err := OldScalarMult(dst, scalar, &Basepoint)
+func OldScalarBaseMult(
+	dst,
+	scalar *[X25519Size]byte,
+) error {
+	err := OldScalarMult(
+		dst,
+		scalar,
+		&Basepoint,
+	)
 	if err != nil {
-		return fmt.Errorf("goc25519sm.OldScalarBaseMult failure: %v", err)
+		return fmt.Errorf(
+			"\ngoc25519sm.OldScalarBaseMult FAILURE:\n	dst=%v\n	scalar=%v\n	point=%v\n	%v",
+			dst,
+			scalar,
+			&Basepoint,
+			err,
+		)
 	}
 	return nil
 }
 
 // oldScalarMultVerify performs validation of the inputs and outputs
 // of the OldScalarMult and OldScalarBaseMult functions.
-func oldScalarMultVerify(dst, scalar, point *[X25519Size]byte) error {
+func oldScalarMultVerify(
+	dst,
+	scalar,
+	point *[X25519Size]byte,
+) error {
 	// Check for bad scalar length input
 	if l := len(scalar); l != X25519Size {
 		return fmt.Errorf(
-			"goc25519sm.oldScalarMultVerify failure: Bad scalar length: %d, expected %d",
+			"\ngoc25519sm.oldScalarMultVerify FAILURE:\n	got len(scalar)=%v\n	expected len(scalar)=%v",
 			l,
 			X25519Size,
 		)
@@ -126,9 +166,17 @@ func oldScalarMultVerify(dst, scalar, point *[X25519Size]byte) error {
 	// Check for bad point length input
 	if l := len(point); l != X25519Size {
 		return fmt.Errorf(
-			"goc25519sm.oldScalarMultVerify failure: Bad point length: %d, expected %d",
+			"\ngoc25519sm.oldScalarMultVerify FAILURE:\n	got len(point)=%v\n	expected len(point)=%v",
 			l,
 			X25519Size,
+		)
+	}
+	// Check for blacklisted point or scalar
+	if checkBlacklist(*scalar) || checkBlacklist(*point) {
+		return fmt.Errorf(
+			"\ngoc25519sm.oldScalarMultVerify.checkBlacklist FAILURE:\n	scalar=%v\n	point=%v",
+			*scalar,
+			*point,
 		)
 	}
 	// Check for Basepoint molestation when using the standard
@@ -137,25 +185,43 @@ func oldScalarMultVerify(dst, scalar, point *[X25519Size]byte) error {
 	ctPoint := point[:]
 	ctBasepoint := Basepoint[:]
 	var err error
-	if csubtle.ConstantTimeCompare(ctPoint, ctBasepoint) == 1 {
-		err = OldScalarVerifyBasepoint(*point)
+	if csubtle.ConstantTimeCompare(
+		ctPoint,
+		ctBasepoint,
+	) == 1 {
+		err = OldScalarVerifyBasepoint(
+			*point,
+		)
 		if err != nil {
 			return fmt.Errorf(
-				"goc25519sm.oldScalarMultVerify.OldScalarVerifyBasepoint failure: %v",
+				"\ngoc25519sm.oldScalarMultVerify.OldScalarVerifyBasepoint FAILURE:\n	point=%v\n	%v",
+				*point,
 				err,
 			)
 		}
 	} else {
-		cteBasepoint := Basepoint[:]
-		_ = csubtle.ConstantTimeCompare(ctPoint, cteBasepoint)
+		err = OldScalarVerifyBasepoint(
+			Basepoint,
+		)
+		if err != nil {
+			return fmt.Errorf(
+				"\ngoc25519sm.oldScalarMultVerify.OldScalarVerifyBasepoint FAILURE:\n	point=%v\n	%v",
+				&Basepoint,
+				err,
+			)
+		}
 	}
 	// Detect for low-order inputs by checking output
 	// See RFC-8422 S:5.11 for more information
 	var allZeroOutput [X25519Size]byte
 	ctDst := dst[:]
-	if csubtle.ConstantTimeCompare(allZeroOutput[:], ctDst) == 1 {
+	if csubtle.ConstantTimeCompare(
+		allZeroOutput[:],
+		ctDst,
+	) == 1 {
 		return fmt.Errorf(
-			"goc25519sm.oldScalarMultVerify failure: Bad input point: low-order point detected",
+			"\ngoc25519sm.oldScalarMultVerify FAILURE:\n	low-order inputs inferred from output\n		dst=%v",
+			*dst,
 		)
 	}
 	return nil
@@ -165,16 +231,19 @@ func oldScalarMultVerify(dst, scalar, point *[X25519Size]byte) error {
 // defines the standard canonical Curve25519 generator, has not been molested.
 // It is automatically called at the time of package initialization and during
 // validation operations, but is exported as it might be useful to others.
-func OldScalarVerifyBasepoint(Basepoint [X25519Size]byte) error {
+func OldScalarVerifyBasepoint(
+	Basepoint [X25519Size]byte,
+) error {
 	ctxBasepoint := Basepoint[:]
 	if csubtle.ConstantTimeCompare(ctxBasepoint, []byte{
 		0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	}) != 1 {
+	},
+	) != 1 {
 		return fmt.Errorf(
-			"goc25519sm.OldScalarVerifyBasepoint failure: got %v",
+			"\ngoc25519sm.OldScalarVerifyBasepoint FAILURE:\n	ctxBasepoint=%v",
 			ctxBasepoint,
 		)
 	}
@@ -214,11 +283,122 @@ var (
 	}
 )
 
+// blacklist from https://eprint.iacr.org/2017/806.pdf
+var blacklist = [][X25519Size]byte{
+	{
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	},
+
+	{
+		0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	},
+
+	{
+		0xe0, 0xeb, 0x7a, 0x7c, 0x3b, 0x41, 0xb8, 0xae,
+		0x16, 0x56, 0xe3, 0xfa, 0xf1, 0x9f, 0xc4, 0x6a,
+		0xda, 0x09, 0x8d, 0xeb, 0x9c, 0x32, 0xb1, 0xfd,
+		0x86, 0x62, 0x05, 0x16, 0x5f, 0x49, 0xb8, 0x00,
+	},
+
+	{
+		0x5f, 0x9c, 0x95, 0xbc, 0xa3, 0x50, 0x8c, 0x24,
+		0xb1, 0xd0, 0xb1, 0x55, 0x9c, 0x83, 0xef, 0x5b,
+		0x04, 0x44, 0x5c, 0xc4, 0x58, 0x1c, 0x8e, 0x86,
+		0xd8, 0x22, 0x4e, 0xdd, 0xd0, 0x9f, 0x11, 0x57,
+	},
+
+	{
+		0xec, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x7f,
+	},
+
+	{
+		0xed, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x7f,
+	},
+
+	{
+		0xee, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x7f,
+	},
+
+	{
+		205, 235, 122, 124, 59, 65, 184, 174,
+		22, 86, 227, 250, 241, 159, 196, 106,
+		218, 9, 141, 235, 156, 50, 177, 253,
+		134, 98, 5, 22, 95, 73, 184, 128,
+	},
+
+	{
+		76, 156, 149, 188, 163, 80, 140, 36,
+		177, 208, 177, 85, 156, 131, 239, 91,
+		4, 68, 92, 196, 88, 28, 142, 134,
+		216, 34, 78, 221, 208, 159, 17, 215,
+	},
+
+	{
+		217, 255, 255, 255, 255, 255, 255, 255,
+		255, 255, 255, 255, 255, 255, 255, 255,
+		255, 255, 255, 255, 255, 255, 255, 255,
+		255, 255, 255, 255, 255, 255, 255, 255,
+	},
+
+	{
+		218, 255, 255, 255, 255, 255, 255, 255,
+		255, 255, 255, 255, 255, 255, 255, 255,
+		255, 255, 255, 255, 255, 255, 255, 255,
+		255, 255, 255, 255, 255, 255, 255, 255,
+	},
+
+	{
+		219, 255, 255, 255, 255, 255, 255, 255,
+		255, 255, 255, 255, 255, 255, 255, 255,
+		255, 255, 255, 255, 255, 255, 255, 255,
+		255, 255, 255, 255, 255, 255, 255, 255,
+	},
+}
+
+// checkBlacklist verifies input is not blacklisted
+func checkBlacklist(
+	input [X25519Size]byte,
+) bool {
+	isBlacklisted := false
+	for _, blackList := range blacklist {
+		if csubtle.ConstantTimeCompare(
+			input[:],
+			blackList[:],
+		) == 1 {
+			isBlacklisted = true
+			break
+		}
+	}
+	return isBlacklisted
+}
+
 // init initializes the goc25519sm package
 func init() {
 	// Ensure that Basepoint has not been molested
-	initerr := OldScalarVerifyBasepoint(Basepoint)
+	initerr := OldScalarVerifyBasepoint(
+		Basepoint,
+	)
 	if initerr != nil {
-		panic(fmt.Sprintf("goc25519sm.init.OldScalarVerifyBasepoint failure: %v", initerr))
+		panic(
+			fmt.Sprintf(
+				"goc25519sm.init.OldScalarVerifyBasepoint FAILURE:\n	%v",
+				initerr,
+			),
+		)
 	}
 }

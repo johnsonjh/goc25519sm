@@ -14,19 +14,36 @@ import (
 )
 
 // OldScalarMult -> noasm
-func oldScalarMult(dst, scalar, base *[X25519Size]byte) error {
-	var err error
-	err = OldScalarMultGeneric(dst, scalar, base)
+func oldScalarMult(
+	dst,
+	scalar,
+	base *[X25519Size]byte,
+) error {
+	err := OldScalarMultGeneric(
+		dst,
+		scalar,
+		base,
+	)
 	if err != nil {
 		return fmt.Errorf(
-			"goc25519sm.oldScalarMult.OldScalarMultGeneric failure: %v",
+			"\ngoc25519sm.oldScalarMult.OldScalarMultGeneric FAILURE:\n	dst=%v\n	scalar=%v\n	base=%v\n	%v",
+			dst,
+			scalar,
+			base,
 			err,
 		)
 	}
-	err = oldScalarMultVerify(dst, scalar, base)
+	err = oldScalarMultVerify(
+		dst,
+		scalar,
+		base,
+	)
 	if err != nil {
 		return fmt.Errorf(
-			"goc25519sm.oldScalarMult.OldScalarMultGeneric.oldScalarMultVerify failure: %v",
+			"\ngoc25519sm.oldScalarMult.OldScalarMultGeneric.oldScalarMultVerify FAILURE:\n	dst=%v\n	scalar=%v\n	base=%v\n	%v",
+			dst,
+			scalar,
+			base,
 			err,
 		)
 	}

@@ -18,23 +18,41 @@ import (
 // from the SUPERCOP sources to help people following along.
 
 //go:noescape
-func cswap(inout *[5]uint64, v uint64)
+func cswap(
+	inout *[5]uint64,
+	v uint64,
+)
 
 //go:noescape
-func ladderstep(inout *[5][5]uint64)
+func ladderstep(
+	inout *[5][5]uint64,
+)
 
 //go:noescape
-func freeze(inout *[5]uint64)
+func freeze(
+	inout *[5]uint64,
+)
 
 //go:noescape
-func mul(dest, a, b *[5]uint64)
+func mul(
+	dest,
+	a,
+	b *[5]uint64,
+)
 
 //go:noescape
-func square(out, in *[5]uint64)
+func square(
+	out,
+	in *[5]uint64,
+)
 
 // mladder uses a Montgomery ladder
-// to calculate (xr/zr) *= s.
-func mladder(xr, zr *[5]uint64, s *[X25519Size]byte) {
+// to calculate (('xr'/'zr') *= 's').
+func mladder(
+	xr,
+	zr *[5]uint64,
+	s *[X25519Size]byte,
+) {
 	var work [5][5]uint64
 	work[0] = *xr
 	setint(&work[1], 1)
@@ -58,32 +76,66 @@ func mladder(xr, zr *[5]uint64, s *[X25519Size]byte) {
 	*zr = work[2]
 }
 
-func oldScalarMult(dst, scalar, base *[X25519Size]byte) error {
+func oldScalarMult(
+	dst,
+	scalar,
+	base *[X25519Size]byte,
+) error {
 	var e [X25519Size]byte
 	var err error
 	// Dubious to perform clamping at this stage,
 	// but the behavior matches that of libsodium
-	copy(e[:], (*scalar)[:])
+	copy(
+		e[:],
+		(*scalar)[:],
+	)
 	e[0] &= 248
 	e[31] &= 127
 	e[31] |= 64
 	var t, z [5]uint64
-	unpack(&t, base)
-	mladder(&t, &z, &e)
-	invert(&z, &z)
-	mul(&t, &t, &z)
-	pack(dst, &t)
-	err = oldScalarMultVerify(dst, scalar, base)
+	unpack(
+		&t,
+		base,
+	)
+	mladder(
+		&t,
+		&z,
+		&e,
+	)
+	invert(
+		&z,
+		&z,
+	)
+	mul(
+		&t,
+		&t,
+		&z,
+	)
+	pack(
+		dst,
+		&t,
+	)
+	err = oldScalarMultVerify(
+		dst,
+		scalar,
+		base,
+	)
 	if err != nil {
 		return fmt.Errorf(
-			"goc25519sm.oldScalarMult.OldScalarMult_amd64.oldScalarMultVerify failure: %v",
+			"\ngoc25519sm.oldScalarMult.OldScalarMult_amd64.oldScalarMultVerify FAILURE:\n	dst=%v\n	scalar=%v\n	base=%v\n	%v",
+			*dst,
+			*scalar,
+			*base,
 			err,
 		)
 	}
 	return nil
 }
 
-func setint(r *[5]uint64, v uint64) {
+func setint(
+	r *[5]uint64,
+	v uint64,
+) {
 	r[0] = v
 	r[1] = 0
 	r[2] = 0
@@ -91,9 +143,12 @@ func setint(r *[5]uint64, v uint64) {
 	r[4] = 0
 }
 
-// unpack sets r = x where r consists of 5,
-// 51-bit limbs in little-endian order.
-func unpack(r *[5]uint64, x *[X25519Size]byte) {
+// unpack sets 'r' = 'x' where 'r' consists of
+// five 51-bit limbs in little-endian order
+func unpack(
+	r *[5]uint64,
+	x *[X25519Size]byte,
+) {
 	r[0] = uint64(x[0]) |
 		uint64(x[1])<<8 |
 		uint64(x[2])<<16 |
@@ -136,9 +191,12 @@ func unpack(r *[5]uint64, x *[X25519Size]byte) {
 		uint64(x[31]&127)<<44
 }
 
-// pack sets out = x where out is the usual,
-// little-endian form of the 5, 51-bit limbs in x.
-func pack(out *[X25519Size]byte, x *[5]uint64) {
+// pack sets 'out' = 'x' where 'out' is the standard
+// little-endian form of the five 51-bit limbs in 'x'
+func pack(
+	out *[X25519Size]byte,
+	x *[5]uint64,
+) {
 	t := *x
 	freeze(&t)
 	out[0] = byte(t[0])
@@ -179,9 +237,11 @@ func pack(out *[X25519Size]byte, x *[5]uint64) {
 	out[31] = byte(t[4] >> 44)
 }
 
-// invert calculates r = x^-1 mod p
-// using Fermat's little theorem.
-func invert(r, x *[5]uint64) {
+// invert calculates 'r' = (('x'^-1) mod 'p')
+// using Fermat's little theorem
+func invert(
+	r, x *[5]uint64,
+) {
 	var z2, z9, z11, z2_5_0, z2_10_0, z2_20_0, z2_50_0, z2_100_0, t [5]uint64
 	square(&z2, x)           // 2
 	square(&t, &z2)          // 4
@@ -189,28 +249,28 @@ func invert(r, x *[5]uint64) {
 	mul(&z9, &t, x)          // 9
 	mul(&z11, &z9, &z2)      // 11
 	square(&t, &z11)         // 22
-	mul(&z2_5_0, &t, &z9)    // 2^5 - 2^0 = 31
-	square(&t, &z2_5_0)      // 2^6 - 2^1
-	for i := 1; i < 5; i++ { // 2^20 - 2^10
+	mul(&z2_5_0, &t, &z9)    // 2^5   - 2^0  =  31
+	square(&t, &z2_5_0)      // 2^6   - 2^1
+	for i := 1; i < 5; i++ { // 2^20  - 2^10
 		square(&t, &t)
 	}
-	mul(&z2_10_0, &t, &z2_5_0) // 2^10 - 2^0
-	square(&t, &z2_10_0)       // 2^11 - 2^1
-	for i := 1; i < 10; i++ {  // 2^20 - 2^10
+	mul(&z2_10_0, &t, &z2_5_0) // 2^10  - 2^0
+	square(&t, &z2_10_0)       // 2^11  - 2^1
+	for i := 1; i < 10; i++ {  // 2^20  - 2^10
 		square(&t, &t)
 	}
-	mul(&z2_20_0, &t, &z2_10_0) // 2^20 - 2^0
-	square(&t, &z2_20_0)        // 2^21 - 2^1
-	for i := 1; i < 20; i++ {   // 2^40 - 2^20
+	mul(&z2_20_0, &t, &z2_10_0) // 2^20  - 2^0
+	square(&t, &z2_20_0)        // 2^21  - 2^1
+	for i := 1; i < 20; i++ {   // 2^40  - 2^20
 		square(&t, &t)
 	}
-	mul(&t, &t, &z2_20_0)     // 2^40 - 2^0
-	square(&t, &t)            // 2^41 - 2^1
-	for i := 1; i < 10; i++ { // 2^50 - 2^10
+	mul(&t, &t, &z2_20_0)     // 2^40  - 2^0
+	square(&t, &t)            // 2^41  - 2^1
+	for i := 1; i < 10; i++ { // 2^50  - 2^10
 		square(&t, &t)
 	}
-	mul(&z2_50_0, &t, &z2_10_0) // 2^50 - 2^0
-	square(&t, &z2_50_0)        // 2^51 - 2^1
+	mul(&z2_50_0, &t, &z2_10_0) // 2^50  - 2^0
+	square(&t, &z2_50_0)        // 2^51  - 2^1
 	for i := 1; i < 50; i++ {   // 2^100 - 2^50
 		square(&t, &t)
 	}
