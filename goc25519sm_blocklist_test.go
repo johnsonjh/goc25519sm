@@ -16,7 +16,7 @@ import (
 	leak "go.uber.org/goleak"
 )
 
-func TestBlacklistPoint(
+func TestBlocklistPoint(
 	t *testing.T,
 ) {
 	defer leak.VerifyNone(
@@ -38,12 +38,12 @@ func TestBlacklistPoint(
 	); err != nil {
 		t.Fatal(
 			fmt.Sprintf(
-				"\ngoc25519sm_blacklist_test.TestBlacklist.crand.Read FAILURE:\n   %v",
+				"\ngoc25519sm_blocklist_test.TestBlocklist.crand.Read FAILURE:\n   %v",
 				err,
 			),
 		)
 	}
-	for i, p := range blacklist {
+	for i, p := range blocklist {
 		var out [X25519Size]byte
 		err = OldScalarMult(
 			&out,
@@ -52,7 +52,7 @@ func TestBlacklistPoint(
 		)
 		if err == nil {
 			t.Errorf(
-				"\ngoc25519sm_blacklist_test.TestBlacklist.OldScalarMult FAILURE:\n    BLACKLIST TEST %v FAILED TO DETECT BAD INPUT POINT P\n	out=%v\n	x=%v\n	p=%v\n	%v",
+				"\ngoc25519sm_blocklist_test.TestBlocklist.OldScalarMult FAILURE:\n    BLACKLIST TEST %v FAILED TO DETECT BAD INPUT POINT P\n	out=%v\n	x=%v\n	p=%v\n	%v",
 				i,
 				out,
 				x,
@@ -63,7 +63,7 @@ func TestBlacklistPoint(
 	}
 }
 
-func TestBlacklistScalar(
+func TestBlocklistScalar(
 	t *testing.T,
 ) {
 	defer leak.VerifyNone(
@@ -85,12 +85,12 @@ func TestBlacklistScalar(
 	); err != nil {
 		t.Fatal(
 			fmt.Sprintf(
-				"\ngoc25519sm_blacklist_test.TestBlacklist.crand.Read FAILURE:\n   %v",
+				"\ngoc25519sm_blocklist_test.TestBlocklist.crand.Read FAILURE:\n   %v",
 				err,
 			),
 		)
 	}
-	for i, x := range blacklist {
+	for i, x := range blocklist {
 		var out [X25519Size]byte
 		err = OldScalarMult(
 			&out,
@@ -99,7 +99,7 @@ func TestBlacklistScalar(
 		)
 		if err == nil {
 			t.Errorf(
-				"\ngoc25519sm_blacklist_test.TestBlacklist.OldScalarMult FAILURE:\n    BLACKLIST TEST %v FAILED TO DETECT BAD INPUT SCALAR X\n	out=%v\n	x=%v\n	p=%v\n	%v",
+				"\ngoc25519sm_blocklist_test.TestBlocklist.OldScalarMult FAILURE:\n    BLACKLIST TEST %v FAILED TO DETECT BAD INPUT SCALAR X\n	out=%v\n	x=%v\n	p=%v\n	%v",
 				i,
 				out,
 				x,
