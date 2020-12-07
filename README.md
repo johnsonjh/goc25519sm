@@ -26,6 +26,11 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 
 *  [goc25519sm](https://pkg.go.dev/github.com/johnsonjh/goc25519sm) *GoDocs*
 
+## Coverage Reports
+
+*  [GoCov](https://pktdist.gridfinity.com/coverage/goc25519sm/)
+*  [Coveralls](https://coveralls.io/github/johnsonjh/goc25519sm)
+
 ## License
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjohnsonjh%2Fgoc25519sm.svg?type=large)](https://app.fossa.com/reports/64562da2-2df4-4566-8120-2200ca634465)
