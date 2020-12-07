@@ -52,7 +52,7 @@ func TestBlocklistPoint(
 		)
 		if err == nil {
 			t.Errorf(
-				"\ngoc25519sm_blocklist_test.TestBlocklist.OldScalarMult FAILURE:\n    BLACKLIST TEST %v FAILED TO DETECT BAD INPUT POINT P\n	out=%v\n	x=%v\n	p=%v\n	%v",
+				"\ngoc25519sm_blocklist_test.TestBlocklist.OldScalarMult FAILURE:\n    BLOCKLIST TEST %v FAILED TO DETECT BAD INPUT POINT P\n	out=%v\n	x=%v\n	p=%v\n	%v",
 				i,
 				out,
 				x,
@@ -99,7 +99,7 @@ func TestBlocklistScalar(
 		)
 		if err == nil {
 			t.Errorf(
-				"\ngoc25519sm_blocklist_test.TestBlocklist.OldScalarMult FAILURE:\n    BLACKLIST TEST %v FAILED TO DETECT BAD INPUT SCALAR X\n	out=%v\n	x=%v\n	p=%v\n	%v",
+				"\ngoc25519sm_blocklist_test.TestBlocklist.OldScalarMult FAILURE:\n    BLOCKLIST TEST %v FAILED TO DETECT BAD INPUT SCALAR X\n	out=%v\n	x=%v\n	p=%v\n	%v",
 				i,
 				out,
 				x,
