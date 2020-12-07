@@ -24,7 +24,7 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 
 ## Documentation
 
-*  [goc25519sm](https://pkg.go.dev/github.com/johnsonjh/goc25519sm) *GoDocs*
+*  [GoDocs](https://pkg.go.dev/github.com/johnsonjh/goc25519sm)
 
 ## Coverage Reports
 
@@ -33,4 +33,21 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 
 ## License
 
+```
+Copyright 2020 Jeffrey H. Johnson
+Copyright 2020 Gridfinity, LLC
+Copyright 2020 Frank Denis <j at pureftpd dot org>
+Copyright 2019 The Go Authors
+Copyright 2015 Google, Inc
+Copyright 2011 The OpenSSL Project
+Copyright 1998 Eric Young (eay@cryptsoft.com)
+
+This product includes software developed by the
+OpenSSL Project for use in the OpenSSL Toolkit
+(http://www.openssl.org/)
+
+All rights reserved.
+```
+
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjohnsonjh%2Fgoc25519sm.svg?type=large)](https://app.fossa.com/reports/64562da2-2df4-4566-8120-2200ca634465)
+
