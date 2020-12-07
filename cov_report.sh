@@ -46,7 +46,7 @@ fi
 
 export CGO_ENABLED=1
 export TEST_TAGS='-tags=amd64,purego'
-export TEST_FLAGS="${TEST_TAGS} -count=1 -cover -parallel=1 -race"
+export TEST_FLAGS="${TEST_TAGS} -count=1 -covermode=atomic -cover -cpus=1 -parallel=1 -race -trimpath"
 export GOFLAGS='-tags=osnetgo,osusergo'
 # shellcheck disable=SC2155
 export GOC_TARGETS="$(go list ./... | grep -v test | sort | uniq)"
@@ -79,6 +79,12 @@ fi
 (gocov-html < gocov_report_goc.json > gocov_report_goc.html) || \
 	{ printf '\n%s\n' "gocov-html failed to complete successfully." >&2
 		exit 1 || :; };
+
+if [ -x "${HOME}/.goc25519sm.cov.local" ]; then
+	printf '%s\n' "Local script started"
+	( exec ${HOME}/.goc25519sm.cov.local )
+	printf '%s\n' "Local script ended"
+fi
 
 mkdir -p ./cov && mv -f ./gocov_report_* ./cov && \
 printf '\n%s\n' "Done - output is located at ./cov"
