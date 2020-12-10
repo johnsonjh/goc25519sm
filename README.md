@@ -15,16 +15,35 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 [![CodacyBadge](https://api.codacy.com/project/badge/Grade/1554a9e30cff45aa80635c1e00dafa9e)](https://app.codacy.com/gh/johnsonjh/goc25519sm?utm_source=github.com&utm_medium=referral&utm_content=johnsonjh/goc25519sm&utm_campaign=Badge_Grade)
 [![LgtmAlerts](https://img.shields.io/lgtm/alerts/g/johnsonjh/goc25519sm.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/johnsonjh/goc25519sm/alerts/)
 [![CodeBeat](https://codebeat.co/badges/95866deb-d1d0-4fe9-a6ac-807f8442c400)](https://codebeat.co/projects/github-com-johnsonjh-goc25519sm-master)
+[![CodeclimateMaintainability](https://api.codeclimate.com/v1/badges/bbc4379b8c69ca2693e6/maintainability)](https://codeclimate.com/github/johnsonjh/goc25519sm/maintainability)
 [![TickgitTODOs](https://img.shields.io/endpoint?url=https://api.tickgit.com/badge?repo=github.com/johnsonjh/goc25519sm)](https://www.tickgit.com/browse?repo=github.com/johnsonjh/goc25519sm)
 
-## Availability
+##  Availability
 
-*  [Gridfinity GitLab](https://gitlab.gridfinity.com/jeff/goc25519sm)
-*  [GitHub](https://github.com/johnsonjh/goc25519sm)
+  * Source Code Releases
+    *  [Gridfinity GitLab Releases](https://gitlab.gridfinity.com/jeff/goc25519sm/-/releases/)
+    *  [GitHub Releases](https://github.com/johnsonjh/goc25519sm/releases/)
+
+  * Source Code Tags
+    *  [Gridfinity GitLab Tags](https://gitlab.gridfinity.com/jeff/goc25519sm/-/tags/)
+    *  [GitHub Tags](https://github.com/johnsonjh/goc25519sm/tags/)
+
+  * Development Repositories
+    *  [Gridfinity GitLab](https://gitlab.gridfinity.com/jeff/goc25519sm)
+    *  [GitHub](https://github.com/johnsonjh/goc25519sm)
+
+## Community
+
+*  [PKT.Chat #goc25519sm](https://pkt.chat/pkt/channels/goc25519sm)
+
+## Issue Tracking
+
+*  [Gridfinity GitLab Issues](https://gitlab.gridfinity.com/jeff/goc25519sm/-/issues)
 
 ## Documentation
 
 *  [GoDocs](https://pkg.go.dev/github.com/johnsonjh/goc25519sm)
+*  [Gridfinity Wiki](https://wiki.gridfinity.com/wiki?name=goc25519sm)
 
 ## Coverage Reports
 
@@ -47,7 +66,5 @@ OpenSSL Project for use in the OpenSSL Toolkit
 (http://www.openssl.org/)
 
 All rights reserved.
-```
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjohnsonjh%2Fgoc25519sm.svg?type=large)](https://app.fossa.com/reports/64562da2-2df4-4566-8120-2200ca634465)
+``` [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjohnsonjh%2Fgoc25519sm.svg?type=large)](https://app.fossa.com/reports/64562da2-2df4-4566-8120-2200ca634465)
 
