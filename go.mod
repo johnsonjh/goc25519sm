@@ -10,7 +10,7 @@ require (
 	go4.org v0.0.0-20200411211856-f5505b9728dd
 	golang.org/x/lint v0.0.0-20201208152925-83fdc39ff7b5 // indirect
 	golang.org/x/mod v0.4.1-0.20201203231814-bc388b264a24 // indirect
-	golang.org/x/tools v0.0.0-20201208233053-a543418bbed2 // indirect
+	golang.org/x/tools v0.0.0-20201211025543-abf6a1d87e11 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 )
