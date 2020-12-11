@@ -14,8 +14,8 @@ import (
 	"fmt"
 	"testing"
 
+	u "github.com/johnsonjh/goc25519sm/testutil"
 	goc25519sm "github.com/johnsonjh/goc25519sm"
-	leak "go.uber.org/goleak"
 )
 
 const (
@@ -83,7 +83,7 @@ var curved25519Expected = [goc25519sm.X25519Size]byte{
 func TestTestVectors(
 	t *testing.T,
 ) {
-	defer leak.VerifyNone(
+	defer u.LeakVerifyNone(
 		t,
 	)
 	t.Run(
@@ -118,7 +118,7 @@ func testTestVectors(
 		point *[goc25519sm.X25519Size]byte,
 	) error,
 ) {
-	defer leak.VerifyNone(
+	defer u.LeakVerifyNone(
 		t,
 	)
 	for _, tv := range testVectors {
@@ -163,7 +163,7 @@ func testTestVectors(
 func TestHighBitIgnored(
 	t *testing.T,
 ) {
-	defer leak.VerifyNone(
+	defer u.LeakVerifyNone(
 		t,
 	)
 	var err error
@@ -230,7 +230,7 @@ func TestHighBitIgnored(
 func TestOldScalarBaseMult1024(
 	t *testing.T,
 ) {
-	defer leak.VerifyNone(
+	defer u.LeakVerifyNone(
 		t,
 	)
 	var err error
@@ -266,7 +266,7 @@ func TestOldScalarBaseMult1024(
 func TestBasepointMolestation(
 	t *testing.T,
 ) {
-	defer leak.VerifyNone(
+	defer u.LeakVerifyNone(
 		t,
 	)
 	var err error
@@ -307,7 +307,7 @@ func TestBasepointMolestation(
 func TestOldScalarBaseMult200(
 	t *testing.T,
 ) {
-	defer leak.VerifyNone(
+	defer u.LeakVerifyNone(
 		t,
 	)
 	var err error
@@ -348,7 +348,7 @@ func TestOldScalarBaseMult200(
 func TestLowOrderPoints(
 	t *testing.T,
 ) {
-	defer leak.VerifyNone(
+	defer u.LeakVerifyNone(
 		t,
 	)
 	var x [goc25519sm.X25519Size]byte

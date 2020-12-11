@@ -12,14 +12,13 @@ import (
 	crand "crypto/rand"
 	"fmt"
 	"testing"
-
-	leak "go.uber.org/goleak"
+	u "github.com/johnsonjh/goc25519sm/testutil"
 )
 
 func TestBlocklistPoint(
 	t *testing.T,
 ) {
-	defer leak.VerifyNone(
+	defer u.LeakVerifyNone(
 		t,
 	)
 	var x [X25519Size]byte
@@ -66,7 +65,7 @@ func TestBlocklistPoint(
 func TestBlocklistScalar(
 	t *testing.T,
 ) {
-	defer leak.VerifyNone(
+	defer u.LeakVerifyNone(
 		t,
 	)
 	var p [X25519Size]byte
