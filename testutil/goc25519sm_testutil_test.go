@@ -7,8 +7,8 @@
 package testutil_test
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 
 	u "github.com/johnsonjh/goc25519sm/testutil"
 )
@@ -44,4 +44,3 @@ func TestLeakVerifyNoneEnabled(
 		)
 	}
 }
-

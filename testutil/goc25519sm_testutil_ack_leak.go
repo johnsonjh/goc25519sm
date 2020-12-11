@@ -10,8 +10,8 @@
 package testutil
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 
 	goleak "go.uber.org/goleak"
 )
@@ -27,6 +27,6 @@ func leakVerifyNone(
 	}
 	goleak.VerifyNone(
 		t,
-		)
+	)
 	return nil
 }

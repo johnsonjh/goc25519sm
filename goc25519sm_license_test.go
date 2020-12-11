@@ -27,9 +27,7 @@ func TestLicense(
 		licenses,
 	) == 0 {
 		t.Fatal(
-			fmt.Sprintf(
-				"\ngoc25519sm_license_test.TestLicense.Licenses FAILURE",
-			),
+			"\ngoc25519sm_license_test.TestLicense.Licenses FAILURE",
 		)
 	} else {
 		t.Log(

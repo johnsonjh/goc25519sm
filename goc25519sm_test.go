@@ -14,8 +14,8 @@ import (
 	"fmt"
 	"testing"
 
-	u "github.com/johnsonjh/goc25519sm/testutil"
 	goc25519sm "github.com/johnsonjh/goc25519sm"
+	u "github.com/johnsonjh/goc25519sm/testutil"
 )
 
 const (
