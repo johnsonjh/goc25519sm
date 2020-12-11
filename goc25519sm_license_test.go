@@ -12,14 +12,14 @@ import (
 	"fmt"
 	"testing"
 
-	leak "go.uber.org/goleak"
+	u "github.com/johnsonjh/goc25519sm/testutil"
 	licn "go4.org/legal"
 )
 
 func TestLicense(
 	t *testing.T,
 ) {
-	defer leak.VerifyNone(
+	defer u.LeakVerifyNone(
 		t,
 	)
 	licenses := licn.Licenses()
