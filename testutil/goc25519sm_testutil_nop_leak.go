@@ -10,8 +10,8 @@
 package testutil
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 // LeakVerifyNone -> disabled

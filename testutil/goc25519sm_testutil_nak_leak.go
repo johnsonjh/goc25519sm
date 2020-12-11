@@ -10,12 +10,12 @@
 package testutil
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func leakVerifyNone(
-	t *testing.T,
+	_ *testing.T,
 	r bool,
 ) error {
 	if r != false {

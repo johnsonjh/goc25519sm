@@ -12,6 +12,7 @@ import (
 	crand "crypto/rand"
 	"fmt"
 	"testing"
+
 	u "github.com/johnsonjh/goc25519sm/testutil"
 )
 

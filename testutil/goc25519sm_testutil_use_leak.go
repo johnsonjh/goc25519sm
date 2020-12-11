@@ -10,9 +10,8 @@
 package testutil
 
 import (
-	"testing"
 	"fmt"
-
+	"testing"
 )
 
 func LeakVerifyNone(
@@ -32,4 +31,3 @@ func LeakVerifyNone(
 	}
 	return nil
 }
-
