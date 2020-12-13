@@ -5,7 +5,6 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://github.com/johnsonjh/goc25519sm/blob/master/LICENSE)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjohnsonjh%2Fgoc25519sm.svg?type=shield)](https://app.fossa.com/reports/64562da2-2df4-4566-8120-2200ca634465)
 [![GoVersion](https://img.shields.io/github/go-mod/go-version/johnsonjh/goc25519sm.svg)](https://github.com/johnsonjh/goc25519sm/blob/master/go.mod)
-[![GitLabPipelineStatus](https://gitlab.gridfinity.com/jeff/goc25519sm/badges/master/pipeline.svg)](https://gitlab.gridfinity.com/jeff/goc25519sm/-/commits/master) 
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/johnsonjh/goc25519sm)](https://pkg.go.dev/github.com/johnsonjh/goc25519sm)
 [![GoReportCard](https://goreportcard.com/badge/github.com/johnsonjh/goc25519sm)](https://goreportcard.com/report/github.com/johnsonjh/goc25519sm)
 [![GitHubRelease](https://img.shields.io/github/release/johnsonjh/goc25519sm.svg)](https://github.com/johnsonjh/goc25519sm/releases/)
@@ -18,6 +17,7 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 [![CodeBeat](https://codebeat.co/badges/95866deb-d1d0-4fe9-a6ac-807f8442c400)](https://codebeat.co/projects/github-com-johnsonjh-goc25519sm-master)
 [![CodeclimateMaintainability](https://api.codeclimate.com/v1/badges/bbc4379b8c69ca2693e6/maintainability)](https://codeclimate.com/github/johnsonjh/goc25519sm/maintainability)
 [![TickgitTODOs](https://img.shields.io/endpoint?url=https://api.tickgit.com/badge?repo=github.com/johnsonjh/goc25519sm)](https://www.tickgit.com/browse?repo=github.com/johnsonjh/goc25519sm)
+[![](https://gitlab.gridfinity.com/jeff/goc25519sm/badges/master/pipeline.svg)](https://gitlab.gridfinity.com/jeff/goc25519sm/-/commits/master)
 
 
 ##  Availability
