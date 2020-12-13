@@ -38,8 +38,8 @@ default:
     go tool dist env -p
 .scriptGitPre: &scriptGitPre | 
     # scriptGitPre
-    git -P reset --hard
-    git -P diff --full-index --ignore-cr-at-eol --exit-code
+    git --no-pager reset --hard
+    git --no-pager diff --full-index --ignore-cr-at-eol --exit-code
 ###################### End Common Blocks
 
 ###################### Begin Windows Build + Test
