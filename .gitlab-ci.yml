@@ -74,7 +74,9 @@ linux job:
     - yum clean all -y || true :;
     - dnf upgrade --refresh -y || true :;
     - dnf groupinstall "Development Tools" -y || true :;
-    - dnf install scl devtoolset-9 -y || true :;
+    - dnf install epel-release centos-release-scl centos-release-scl-rh -y || true :;
+    - dnf install rpmconf scl-utils devtoolset-9 -y || true :;
+    - yes | rpmconf -a || true :;
     - . /opt/rh/devtoolset-9/enable
     - dnf clean all -y || true :;
     - | 
