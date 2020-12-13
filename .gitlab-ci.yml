@@ -36,6 +36,10 @@ default:
     go env
     echo "Go Current Environment:"
     go tool dist env -p
+.scriptGitPre: &scriptGitPre | 
+    # scriptGitPre
+    git -P reset --hard
+    git -P diff --full-index --ignore-cr-at-eol --exit-code
 ###################### End Common Blocks
 
 ###################### Begin Windows Build + Test
@@ -53,6 +57,7 @@ windows job:
     - go clean -modcache -cache -r
     - go mod download
     - go mod verify
+    - *scriptGitPre
     - go build -v -a -tags="osnetgo,osusergo" .\...
     - | 
         # status
@@ -91,6 +96,7 @@ linux job:
     - go clean -modcache -cache -r
     - go mod download
     - go mod verify
+    - *scriptGitPre
     - CGO_ENABLED=0 go build -v -a -tags="osnetgo,osusergo" ./...
     - | 
         # status
@@ -117,6 +123,7 @@ macos job:
     - go clean -modcache -cache -r
     - go mod download
     - go mod verify
+    - *scriptGitPre
     - CGO_ENABLED=0 go build -v -a -tags="osnetgo,osusergo" ./...
     - | 
         # status
