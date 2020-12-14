@@ -879,7 +879,7 @@ func feInvert(
 // version of OldScalarMult is not available. It is exported to provide
 // implementators an alternative if they encounter any trouble with an
 // optimized version and wish to call the pure Go implementation explicitly,
-// and should not be needed for normal use.
+// but should not be needed for normal use.
 func OldScalarMultGeneric(
 	dst,
 	scalar,
