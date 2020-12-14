@@ -64,7 +64,7 @@ windows job:
     - go mod download
     - go mod verify
     - *scriptGitPre
-    - go build -v -a -tags="osnetgo,osusergo" -trimpath -buildid= .\...
+    - go build -v -a -tags="osnetgo,osusergo" -trimpath .\...
     - | 
         # status
         echo "Build completed successfully - running tests; coverage and race detector enabled"
@@ -104,7 +104,7 @@ linux job:
     - go mod download
     - go mod verify
     - *scriptGitPre
-    - CGO_ENABLED=0 go build -v -a -tags="osnetgo,osusergo" -trimpath -buildid= $(go list ./... | grep -v test | sort | uniq)
+    - CGO_ENABLED=0 go build -v -a -tags="osnetgo,osusergo" -trimpath $(go list ./... | grep -v test | sort | uniq)
     - | 
         # status
         echo "Build completed successfully - running tests; coverage and race detector enabled"
@@ -132,7 +132,7 @@ macos job:
     - go mod download
     - go mod verify
     - *scriptGitPre
-    - CGO_ENABLED=0 go build -v -a -tags="osnetgo,osusergo" -trimpath -buildid= $(go list ./... | grep -v test | sort | uniq)
+    - CGO_ENABLED=0 go build -v -a -tags="osnetgo,osusergo" -trimpath $(go list ./... | grep -v test | sort | uniq)
     - | 
         # status
         echo "Build completed successfully - running tests; coverage and race detector enabled"
