@@ -62,20 +62,25 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 
 ## License
 
+*  [BSD 3-Clause License (Revised)](https://tldrlegal.com/license/bsd-3-clause-license-(revised))
+
 ```
 Copyright 2020 Jeffrey H. Johnson
 Copyright 2020 Gridfinity, LLC
-Copyright 2020 Frank Denis <j at pureftpd dot org>
-Copyright 2019 The Go Authors
-Copyright 2015 Google, Inc
-Copyright 2011 The OpenSSL Project
-Copyright 1998 Eric Young (eay@cryptsoft.com)
+Copyright 2020 Frank Denis <j at pureftpd dot org>.
+Copyright 2020 Filippo Valsorda.
+Copyright 2019 The Go Authors.
+Copyright 2015 Google, Inc.
+Copyright 2011 The OpenSSL Project.
+Copyright 1998 Eric Young (eay@cryptsoft.com).
 
 This product includes software developed by the
 OpenSSL Project for use in the OpenSSL Toolkit
 (http://www.openssl.org/)
 
 All rights reserved.
+
+Please review "LICENSE" for all Terms and Conditions.
 ```
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjohnsonjh%2Fgoc25519sm.svg?type=large)](https://app.fossa.com/reports/64562da2-2df4-4566-8120-2200ca634465)
