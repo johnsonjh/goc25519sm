@@ -29,7 +29,7 @@
 * Create a new issue at [Gridfinity GitLab](https://gitlab.gridfinity.com/jeff/goc25519sm/-/issues)
   * Check "*This issue is confidential and should only be visible to team members with at least Reporter access.*"
 
-  * Or, send a **PGP-encrypted** email to <jeff@gridfinity.com>
+  * Or, send a **PGP-encrypted** email to <mailto:jeff@gridfinity.com>
 
 ```text
 -----BEGIN PGP PUBLIC KEY BLOCK-----
