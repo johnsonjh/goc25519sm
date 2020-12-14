@@ -2,12 +2,13 @@
 
 ## Supported releases
 
-* Only the most recent current release is ***SUPPORTED***.**☨** 
+* Only the most recent current release is ***SUPPORTED***.**☨**
 
     [![GitHubRelease](https://img.shields.io/github/release/johnsonjh/goc25519sm.svg)](https://github.com/johnsonjh/goc25519sm/releases/)
 
 * **☨** Support is offered on a **best-effort** basis **ONLY**.
 
+```text
       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
       "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
       LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -19,14 +20,15 @@
       THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
       (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
       OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+```
 
 * Pre-release versions and past releases are ***NOT SUPPORTED***.
 
 ## Report a security vulnerability
 
-  * Create a new issue at [Gridfinity GitLab](https://gitlab.gridfinity.com/jeff/goc25519sm/-/issues)
-    * Check "*This issue is confidential and should only be visible to team members with at least Reporter access.*"
-   
+* Create a new issue at [Gridfinity GitLab](https://gitlab.gridfinity.com/jeff/goc25519sm/-/issues)
+  * Check "*This issue is confidential and should only be visible to team members with at least Reporter access.*"
+
   * Or, send a **PGP-encrypted** email to jeff@gridfinity.com
 
 ```text
