@@ -17,21 +17,21 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 [![CodeBeat](https://codebeat.co/badges/95866deb-d1d0-4fe9-a6ac-807f8442c400)](https://codebeat.co/projects/github-com-johnsonjh-goc25519sm-master)
 [![CodeclimateMaintainability](https://api.codeclimate.com/v1/badges/bbc4379b8c69ca2693e6/maintainability)](https://codeclimate.com/github/johnsonjh/goc25519sm/maintainability)
 [![TickgitTODOs](https://img.shields.io/endpoint?url=https://api.tickgit.com/badge?repo=github.com/johnsonjh/goc25519sm)](https://www.tickgit.com/browse?repo=github.com/johnsonjh/goc25519sm)
-[![ ](https://gitlab.gridfinity.com/jeff/goc25519sm/badges/master/pipeline.svg)](https://gitlab.gridfinity.com/jeff/goc25519sm)
+[![CI](https://gitlab.gridfinity.com/jeff/goc25519sm/badges/master/pipeline.svg)](https://gitlab.gridfinity.com/jeff/goc25519sm)
 
 ## Availability
 
 * Source Code Releases
   * [Gridfinity GitLab Releases](https://gitlab.gridfinity.com/jeff/goc25519sm/-/releases/)
-    * [GitHub Releases](https://github.com/johnsonjh/goc25519sm/releases/)
+  * [GitHub Releases](https://github.com/johnsonjh/goc25519sm/releases/)
 
-  * Source Code Tags
-    * [Gridfinity GitLab Tags](https://gitlab.gridfinity.com/jeff/goc25519sm/-/tags/)
-    * [GitHub Tags](https://github.com/johnsonjh/goc25519sm/tags/)
+* Source Code Tags
+  * [Gridfinity GitLab Tags](https://gitlab.gridfinity.com/jeff/goc25519sm/-/tags/)
+  * [GitHub Tags](https://github.com/johnsonjh/goc25519sm/tags/)
 
-  * Development Repositories
-    * [Gridfinity GitLab](https://gitlab.gridfinity.com/jeff/goc25519sm)
-    * [GitHub](https://github.com/johnsonjh/goc25519sm)
+* Development Repositories
+  * [Gridfinity GitLab](https://gitlab.gridfinity.com/jeff/goc25519sm)
+  * [GitHub](https://github.com/johnsonjh/goc25519sm)
 
 ## Community
 
