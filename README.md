@@ -11,7 +11,7 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 [![GitHubTag](https://img.shields.io/github/tag/johnsonjh/goc25519sm.svg)](https://github.com/johnsonjh/goc25519sm/tags/)
 [![LocCount](https://img.shields.io/tokei/lines/github/johnsonjh/goc25519sm.svg)](https://github.com/XAMPPRocky/tokei)
 [![GitHubCodeSize](https://img.shields.io/github/languages/code-size/johnsonjh/goc25519sm.svg)](https://github.com/johnsonjh/goc25519sm)
-[![CoverageStatus](https://coveralls.io/repos/github/johnsonjh/goc25519sm/badge.svg)](https://coveralls.io/github/johnsonjh/goc25519sm)
+[![CoverageStatus](https://coveralls.io/repos/github/johnsonjh/goc25519sm/badge.svg?branch=master)](https://coveralls.io/github/johnsonjh/goc25519sm?branch=master)
 [![CodacyBadge](https://api.codacy.com/project/badge/Grade/1554a9e30cff45aa80635c1e00dafa9e)](https://app.codacy.com/gh/johnsonjh/goc25519sm?utm_source=github.com&utm_medium=referral&utm_content=johnsonjh/goc25519sm&utm_campaign=Badge_Grade)
 [![LgtmAlerts](https://img.shields.io/lgtm/alerts/g/johnsonjh/goc25519sm.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/johnsonjh/goc25519sm/alerts/)
 [![CodeBeat](https://codebeat.co/badges/95866deb-d1d0-4fe9-a6ac-807f8442c400)](https://codebeat.co/projects/github-com-johnsonjh-goc25519sm-master)
