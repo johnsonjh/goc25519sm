@@ -58,7 +58,7 @@ windows job:
     - go mod download
     - go mod verify
     - *scriptGitPre
-    - go build -v -a -tags="osnetgo,osusergo" .\...
+    - go build -v -a -tags="osnetgo,osusergo" -trimpath -buildid= .\...
     - | 
         # status
         echo "Build completed successfully - running tests; coverage and race detector enabled"
@@ -97,11 +97,11 @@ linux job:
     - go mod download
     - go mod verify
     - *scriptGitPre
-    - CGO_ENABLED=0 go build -v -a -tags="osnetgo,osusergo" ./...
+    - CGO_ENABLED=0 go build -v -a -tags="osnetgo,osusergo" -trimpath -buildid= ./...
     - | 
         # status
         echo "Build completed successfully - running tests; coverage and race detector enabled"
-    - CGO_ENABLED=1 go test -v -cover -covermode=atomic -race -tags="osnetgo,osusergo,leaktest,purego" -count=1 -cpu=1 -bench=. -parallel=1 $(go list ./... | grep -v test)
+    - CGO_ENABLED=1 go test -v -cover -covermode=atomic -race -tags="osnetgo,osusergo,leaktest,purego" -count=1 -cpu=1 -bench=. -parallel=1 $(go list ./... | grep -v test | sort | uniq)
 ###################### End Linux Build + Test
 
 ###################### Begin macOS Build + Test
@@ -124,9 +124,9 @@ macos job:
     - go mod download
     - go mod verify
     - *scriptGitPre
-    - CGO_ENABLED=0 go build -v -a -tags="osnetgo,osusergo" ./...
+    - CGO_ENABLED=0 go build -v -a -tags="osnetgo,osusergo" -trimpath -buildid= ./...
     - | 
         # status
         echo "Build completed successfully - running tests; coverage and race detector enabled"
-    - CGO_ENABLED=1 go test -v -cover -covermode=atomic -race -tags="osnetgo,osusergo,leaktest,purego" -count=1 -cpu=1 -bench=. -parallel=1 $(go list ./... | grep -v test)
+    - CGO_ENABLED=1 go test -v -cover -covermode=atomic -race -tags="osnetgo,osusergo,leaktest,purego" -count=1 -cpu=1 -bench=. -parallel=1 $(go list ./... | grep -v test | sort | uniq)
 ###################### End macOS Build + Test

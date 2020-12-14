@@ -4,7 +4,7 @@
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-package testutil_test
+package goc25519sm_test
 
 import (
 	"fmt"

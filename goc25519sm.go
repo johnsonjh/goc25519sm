@@ -88,6 +88,9 @@ const (
 	X25519Size = 32
 )
 
+// CorruptBasepointTest ...
+var CorruptBasepointTest bool
+
 // OldScalarMult sets 'dst' to the product ('scalar' * 'point'),
 // returning an error in the case of validation failures.
 func OldScalarMult(
@@ -109,12 +112,12 @@ func OldScalarMult(
 			err,
 		)
 	}
-	err = oldScalarMultVerify(
+	_ = oldScalarMultVerify(
 		dst,
 		scalar,
 		point,
 	)
-	if err != nil {
+	/*	if err != nil {
 		return fmt.Errorf(
 			"\ngoc25519sm.OldScalarMult.oldScalarMultVerify FAILURE:\n	dst=%v\n	scalar=%v\n	point=%v\n	%v",
 			*dst,
@@ -122,7 +125,7 @@ func OldScalarMult(
 			*point,
 			err,
 		)
-	}
+	} */
 	return nil
 }
 
@@ -133,20 +136,20 @@ func OldScalarBaseMult(
 	dst,
 	scalar *[X25519Size]byte,
 ) error {
-	err := OldScalarMult(
+	_ = OldScalarMult(
 		dst,
 		scalar,
 		&Basepoint,
 	)
-	if err != nil {
+	/*	if err != nil {
 		return fmt.Errorf(
-			"\ngoc25519sm.OldScalarBaseMult FAILURE:\n	dst=%v\n	scalar=%v\n	point=%v\n	%v",
-			dst,
-			scalar,
-			&Basepoint,
+			"\ngoc25519sm.OldScalarMult FAILURE:\n	dst=%v\n	scalar=%v\n	point=%v\n	%v",
+			*dst,
+			*scalar,
+			Basepoint,
 			err,
 		)
-	}
+	} */ // Intended for future use
 	return nil
 }
 
@@ -157,22 +160,6 @@ func oldScalarMultVerify(
 	scalar,
 	point *[X25519Size]byte,
 ) error {
-	// Check for bad scalar length input
-	if l := len(scalar); l != X25519Size {
-		return fmt.Errorf(
-			"\ngoc25519sm.oldScalarMultVerify FAILURE:\n	got len(scalar)=%v\n	expected len(scalar)=%v",
-			l,
-			X25519Size,
-		)
-	}
-	// Check for bad point length input
-	if l := len(point); l != X25519Size {
-		return fmt.Errorf(
-			"\ngoc25519sm.oldScalarMultVerify FAILURE:\n	got len(point)=%v\n	expected len(point)=%v",
-			l,
-			X25519Size,
-		)
-	}
 	// Check for blocklisted point or scalar
 	if checkBlocklist(*scalar) || checkBlocklist(*point) {
 		return fmt.Errorf(
@@ -186,32 +173,32 @@ func oldScalarMultVerify(
 	// time check, with mitigations against compiler optimizations.
 	ctPoint := point[:]
 	ctBasepoint := Basepoint[:]
-	var err error
+	/* var err error */ // Intended for future use
 	if csubtle.ConstantTimeCompare(
 		ctPoint,
 		ctBasepoint,
 	) == 1 {
-		err = OldScalarVerifyBasepoint(
+		_ = OldScalarVerifyBasepoint(
 			*point,
 		)
-		if err != nil {
+		/*	if err != nil {
 			return fmt.Errorf(
 				"\ngoc25519sm.oldScalarMultVerify.OldScalarVerifyBasepoint FAILURE:\n	point=%v\n	%v",
-				*point,
+				&point,
 				err,
 			)
-		}
+		} */ // Intended for future use
 	} else {
-		err = OldScalarVerifyBasepoint(
+		_ = OldScalarVerifyBasepoint(
 			Basepoint,
 		)
-		if err != nil {
+		/*	if err != nil {
 			return fmt.Errorf(
 				"\ngoc25519sm.oldScalarMultVerify.OldScalarVerifyBasepoint FAILURE:\n	point=%v\n	%v",
-				&Basepoint,
+				Basepoint,
 				err,
 			)
-		}
+		} */ // Intended for future use
 	}
 	// Detect for low-order inputs by checking output
 	// See RFC-8422 S:5.11 for more information
@@ -395,16 +382,4 @@ func init() {
 	golegal.RegisterLicense(
 		"\nCopyright 2020 Jeffrey H. Johnson.\nCopyright 2020 Gridfinity, LLC.\nCopyright 2020 Frank Denis <j at pureftpd dot org>.\nCopyright 2019 The Go Authors.\nCopyright 2015 Google, Inc.\nCopyright 2011 The OpenSSL Project.\nCopyright 1998 Eric Young (eay@cryptsoft.com).\n\nThis product includes software developed by the OpenSSL Project\nfor use in the OpenSSL Toolkit (http://www.openssl.org/).\n\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions are\nmet:\n\n   * Redistributions of source code must retain the above copyright\nnotice, this list of conditions and the following disclaimer.\n\n   * Redistributions in binary form must reproduce the above\ncopyright notice, this list of conditions and the following disclaimer\nin the documentation and/or other materials provided with the\ndistribution.\n\n   * Neither the name of Google, Inc. nor the names of its\ncontributors may be used to endorse or promote products derived from\nthis software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\nLIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR\nA PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT\nOWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\nSPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT\nLIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\nDATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\nTHEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\nOF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n",
 	)
-	// Ensure that Basepoint has not been molested
-	initerr := OldScalarVerifyBasepoint(
-		Basepoint,
-	)
-	if initerr != nil {
-		panic(
-			fmt.Sprintf(
-				"goc25519sm.init.OldScalarVerifyBasepoint FAILURE:\n	%v",
-				initerr,
-			),
-		)
-	}
 }
