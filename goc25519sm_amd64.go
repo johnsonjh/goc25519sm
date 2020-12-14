@@ -1,5 +1,6 @@
 // Copyright 2020 Jeffrey H. Johnson.
 // Copyright 2020 Gridfinity, LLC.
+// Copyright 2020 Filippo Valsorda.
 // Copyright 2012 The Go Authors.
 // All rights reserved.
 // Use of this source code is governed by the BSD-style
