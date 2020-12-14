@@ -18,7 +18,7 @@ func leakVerifyNone(
 	_ *testing.T,
 	r bool,
 ) error {
-	if r != false {
+	if r {
 		return fmt.Errorf(
 			"testutil.leakVerifyNone: r != false",
 		)
