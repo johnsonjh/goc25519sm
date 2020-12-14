@@ -41,7 +41,6 @@ default:
     git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
     git --no-pager fetch --tags
     git --no-pager fetch --all --recurse-submodules=yes
-    git --no-pager branch -t --create-reflog --show-current
     git --no-pager update-index -q --refresh --really-refresh
     git --no-pager for-each-ref --count=1
     git --no-pager reset --hard
