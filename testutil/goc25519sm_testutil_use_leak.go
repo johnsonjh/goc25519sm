@@ -14,6 +14,7 @@ import (
 	"testing"
 )
 
+// LeakVerifyNone -> enabled (wrapper function)
 func LeakVerifyNone(
 	t *testing.T,
 ) error {
