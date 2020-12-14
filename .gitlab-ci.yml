@@ -118,7 +118,7 @@ macos job:
     stage: all
     script:
     - | 
-        # Update + Upgrade Homebrew
+        # update & upgrade homebrew
         bash --norc --noprofile --posix -c "brew  update >/dev/null 2>&1 || true :;" >/dev/null 2>&1 || true :;
         bash --norc --noprofile --posix -c "brew upgrade >/dev/null 2>&1 || true :;" >/dev/null 2>&1 || true :;
     - *scriptCommon
