@@ -65,8 +65,8 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 *  [BSD 3-Clause License (Revised)](https://tldrlegal.com/license/bsd-3-clause-license-(revised))
 
 ```
-Copyright 2020 Jeffrey H. Johnson
-Copyright 2020 Gridfinity, LLC
+Copyright 2020 Jeffrey H. Johnson.
+Copyright 2020 Gridfinity, LLC.
 Copyright 2020 Frank Denis <j at pureftpd dot org>.
 Copyright 2020 Filippo Valsorda.
 Copyright 2019 The Go Authors.
