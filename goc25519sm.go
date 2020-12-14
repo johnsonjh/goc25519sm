@@ -218,8 +218,8 @@ func oldScalarMultVerify(
 
 // OldScalarVerifyBasepoint verifies that the global Basepoint, which
 // defines the standard canonical Curve25519 generator, has not been molested.
-// It is automatically called at the time of package initialization and during
-// validation operations, but is exported as it might be useful to others.
+// It is automatically called as part of the validation checks, but has been
+// exported as it might be useful to others.
 func OldScalarVerifyBasepoint(
 	Basepoint [X25519Size]byte,
 ) error {
