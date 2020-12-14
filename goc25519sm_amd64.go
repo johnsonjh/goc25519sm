@@ -13,9 +13,8 @@ import (
 	"fmt"
 )
 
-// These functions are implemented in the .s files. The names
-// of the functions in the rest of the file are also taken
-// from the SUPERCOP sources to help people following along.
+// These functions are implemented in the '.s' files
+// Naming is analogous to the SUPERCOP implementation
 
 //go:noescape
 func cswap(
@@ -46,8 +45,8 @@ func square(
 	in *[5]uint64,
 )
 
-// mladder uses a Montgomery ladder
-// to calculate (('xr'/'zr') *= 's').
+// mladder implements a Montgomery ladder
+// to calculate ( ( 'xr'/'zr' ) *= 's' )
 func mladder(
 	xr,
 	zr *[5]uint64,
@@ -55,10 +54,19 @@ func mladder(
 ) {
 	var work [5][5]uint64
 	work[0] = *xr
-	setint(&work[1], 1)
-	setint(&work[2], 0)
+	setint(
+		&work[1],
+		1,
+	)
+	setint(
+		&work[2],
+		0,
+	)
 	work[3] = *xr
-	setint(&work[4], 1)
+	setint(
+		&work[4],
+		1,
+	)
 	j := uint(6)
 	var prevbit byte
 	for i := 31; i >= 0; i-- {
@@ -66,8 +74,13 @@ func mladder(
 			bit := ((*s)[i] >> j) & 1
 			swap := bit ^ prevbit
 			prevbit = bit
-			cswap(&work[1], uint64(swap))
-			ladderstep(&work)
+			cswap(
+				&work[1],
+				uint64(swap),
+			)
+			ladderstep(
+				&work,
+			)
 			j--
 		}
 		j = 7
@@ -92,7 +105,8 @@ func oldScalarMult(
 	e[0] &= 248
 	e[31] &= 127
 	e[31] |= 64
-	var t, z [5]uint64
+	var t,
+		z [5]uint64
 	unpack(
 		&t,
 		base,
@@ -144,7 +158,7 @@ func setint(
 }
 
 // unpack sets 'r' = 'x' where 'r' consists of
-// five 51-bit limbs in little-endian order
+// five 51-bit limbs (in little-endian order)
 func unpack(
 	r *[5]uint64,
 	x *[X25519Size]byte,
@@ -198,7 +212,9 @@ func pack(
 	x *[5]uint64,
 ) {
 	t := *x
-	freeze(&t)
+	freeze(
+		&t,
+	)
 	out[0] = byte(t[0])
 	out[1] = byte(t[0] >> 8)
 	out[2] = byte(t[0] >> 16)
@@ -240,55 +256,177 @@ func pack(
 // invert calculates 'r' = (('x'^-1) mod 'p')
 // using Fermat's little theorem
 func invert(
-	r, x *[5]uint64,
+	r,
+	x *[5]uint64,
 ) {
-	var z2, z9, z11, z2_5_0, z2_10_0, z2_20_0, z2_50_0, z2_100_0, t [5]uint64
-	square(&z2, x)           // 2
-	square(&t, &z2)          // 4
-	square(&t, &t)           // 8
-	mul(&z9, &t, x)          // 9
-	mul(&z11, &z9, &z2)      // 11
-	square(&t, &z11)         // 22
-	mul(&z2_5_0, &t, &z9)    // 2^5   - 2^0  =  31
-	square(&t, &z2_5_0)      // 2^6   - 2^1
-	for i := 1; i < 5; i++ { // 2^20  - 2^10
-		square(&t, &t)
-	}
-	mul(&z2_10_0, &t, &z2_5_0) // 2^10  - 2^0
-	square(&t, &z2_10_0)       // 2^11  - 2^1
-	for i := 1; i < 10; i++ {  // 2^20  - 2^10
-		square(&t, &t)
-	}
-	mul(&z2_20_0, &t, &z2_10_0) // 2^20  - 2^0
-	square(&t, &z2_20_0)        // 2^21  - 2^1
-	for i := 1; i < 20; i++ {   // 2^40  - 2^20
-		square(&t, &t)
-	}
-	mul(&t, &t, &z2_20_0)     // 2^40  - 2^0
-	square(&t, &t)            // 2^41  - 2^1
-	for i := 1; i < 10; i++ { // 2^50  - 2^10
-		square(&t, &t)
-	}
-	mul(&z2_50_0, &t, &z2_10_0) // 2^50  - 2^0
-	square(&t, &z2_50_0)        // 2^51  - 2^1
-	for i := 1; i < 50; i++ {   // 2^100 - 2^50
-		square(&t, &t)
-	}
-	mul(&z2_100_0, &t, &z2_50_0) // 2^100 - 2^0
-	square(&t, &z2_100_0)        // 2^101 - 2^1
-	for i := 1; i < 100; i++ {   // 2^200 - 2^100
-		square(&t, &t)
-	}
-	mul(&t, &t, &z2_100_0)    // 2^200 - 2^0
-	square(&t, &t)            // 2^201 - 2^1
-	for i := 1; i < 50; i++ { // 2^250 - 2^50
-		square(&t, &t)
-	}
-	mul(&t, &t, &z2_50_0) // 2^250 - 2^0
-	square(&t, &t)        // 2^251 - 2^1
-	square(&t, &t)        // 2^252 - 2^2
-	square(&t, &t)        // 2^253 - 2^3
-	square(&t, &t)        // 2^254 - 2^4
-	square(&t, &t)        // 2^255 - 2^5
-	mul(r, &t, &z11)      // 2^255 - 21
+	var z2,
+		z9,
+		z11,
+		z2_5_0,
+		z2_10_0,
+		z2_20_0,
+		z2_50_0,
+		z2_100_0,
+		t [5]uint64
+	square(
+		&z2,
+		x,
+	) // 2
+	square(
+		&t,
+		&z2,
+	) // 4
+	square(
+		&t,
+		&t,
+	) // 8
+	mul(
+		&z9,
+		&t,
+		x,
+	) // 9
+	mul(
+		&z11,
+		&z9,
+		&z2,
+	) // 11
+	square(
+		&t,
+		&z11,
+	) // 22
+	mul(
+		&z2_5_0,
+		&t,
+		&z9,
+	) // 2^5 - 2^0 = 31
+	square(
+		&t,
+		&z2_5_0,
+	) // 2^6 - 2^1
+	for i := 1; i < 5; i++ {
+		square(
+			&t,
+			&t,
+		)
+	} // 2^20 - 2^10
+	mul(
+		&z2_10_0,
+		&t,
+		&z2_5_0,
+	) // 2^10 - 2^0
+	square(
+		&t,
+		&z2_10_0,
+	) // 2^11 - 2^1
+	for i := 1; i < 10; i++ {
+		square(
+			&t,
+			&t,
+		)
+	} // 2^20 - 2^10
+	mul(
+		&z2_20_0,
+		&t,
+		&z2_10_0,
+	) // 2^20 - 2^0
+	square(
+		&t,
+		&z2_20_0,
+	) // 2^21 - 2^1
+	for i := 1; i < 20; i++ {
+		square(
+			&t,
+			&t,
+		)
+	} // 2^40 - 2^20
+	mul(
+		&t,
+		&t,
+		&z2_20_0,
+	) // 2^40 - 2^0
+	square(
+		&t,
+		&t,
+	) // 2^41 - 2^1
+	for i := 1; i < 10; i++ {
+		square(
+			&t,
+			&t,
+		)
+	} // 2^50  - 2^10
+	mul(
+		&z2_50_0,
+		&t,
+		&z2_10_0,
+	) // 2^50  - 2^0
+	square(
+		&t,
+		&z2_50_0,
+	) // 2^51  - 2^1
+	for i := 1; i < 50; i++ {
+		square(
+			&t,
+			&t,
+		)
+	} // 2^100 - 2^50
+	mul(
+		&z2_100_0,
+		&t,
+		&z2_50_0,
+	) // 2^100 - 2^0
+	square(
+		&t,
+		&z2_100_0,
+	) // 2^101 - 2^1
+	for i := 1; i < 100; i++ {
+		square(
+			&t,
+			&t,
+		)
+	} // 2^200 - 2^100
+	mul(
+		&t,
+		&t,
+		&z2_100_0,
+	) // 2^200 - 2^0
+	square(
+		&t,
+		&t,
+	) // 2^201 - 2^1
+	for i := 1; i < 50; i++ {
+		square(
+			&t,
+			&t,
+		)
+	} // 2^250 - 2^50
+	mul(
+		&t,
+		&t,
+		&z2_50_0,
+	) // 2^250 - 2^0
+	square(
+		&t,
+		&t,
+	) // 2^251 - 2^1
+	square(
+		&t,
+		&t,
+	) // 2^252 - 2^2
+	square(
+		&t,
+		&t,
+	) // 2^253 - 2^3
+	square(
+		&t,
+		&t,
+	) // 2^254 - 2^4
+	square(
+		&t,
+		&t,
+	) // 2^255 - 2^5
+	mul(
+		r,
+		&t,
+		&z11,
+	) // 2^255 - 21
 }

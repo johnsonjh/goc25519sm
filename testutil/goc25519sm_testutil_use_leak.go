@@ -24,7 +24,7 @@ func LeakVerifyNone(
 	if err != nil {
 		return fmt.Errorf(
 			fmt.Sprintf(
-				"%v",
+				"	%v",
 				err,
 			),
 		)

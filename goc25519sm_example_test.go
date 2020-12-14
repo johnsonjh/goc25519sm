@@ -30,9 +30,9 @@ func ExampleOldScalarMult() {
 		fmt.Println(
 			fmt.Errorf(
 				"\ngoc25519sm_test.ExampleOldScalarMult.goc25519sm.OldScalarMult FAILURE:\n	dst=%v\n	point=%v\n	base=%v\n	%v",
-				&dst,
-				&goc25519sm.ExamplePointA,
-				&goc25519sm.Basepoint,
+				dst,
+				goc25519sm.ExamplePointA,
+				goc25519sm.Basepoint,
 				err,
 			),
 		)
@@ -61,8 +61,8 @@ func ExampleOldScalarBaseMult() {
 		fmt.Println(
 			fmt.Errorf(
 				"\ngoc25519sm_test.ExampleOldScalarBaseMult.goc25519sm.OldScalarBaseMult FAILURE:\n	dst=%v\n	point=%v\n	%v",
-				&dst,
-				&goc25519sm.ExamplePointB,
+				dst,
+				goc25519sm.ExamplePointB,
 				err,
 			),
 		)

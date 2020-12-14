@@ -196,9 +196,9 @@ func TestHighBitIgnored(
 	if err != nil {
 		t.Errorf(
 			"\ngoc25519sm_test.TestHighBitIgnored.OldScalarMult FAILURE:\n	hi0=%v\n	s=%v\n	u=%v\n	%v",
-			&hi0,
-			&s,
-			&u,
+			hi0,
+			s,
+			u,
 			err,
 		)
 	}
@@ -211,9 +211,9 @@ func TestHighBitIgnored(
 	if err != nil {
 		t.Errorf(
 			"\ngoc25519sm_test.TestHighBitIgnored.OldScalarMult FAILURE:\n	hi1=%v\n	s=%v\n	u=%v\n	%v",
-			&hi1,
-			&s,
-			&u,
+			hi1,
+			s,
+			u,
 			err,
 		)
 	}
@@ -246,9 +246,9 @@ func TestOldScalarBaseMult1024(
 			t.Errorf(
 				"\ngoc25519sm_test.TestOldScalarBaseMult1024.OldScalarBaseMult FAILURE:\n	csk[(%v&1)^1]=%v\n	csk[%v&1]=%v\n	%v",
 				i,
-				&csk[(i&1)^1],
+				csk[(i&1)^1],
 				i,
-				&csk[i&1],
+				csk[i&1],
 				err,
 			)
 		}
@@ -324,8 +324,8 @@ func TestOldScalarBaseMult200(
 			t.Fatal(
 				fmt.Sprintf(
 					"\ngoc25519sm_test.TestOldScalarBaseMult200.OldScalarBaseMult FAILURE:\n	in=%v\n	out=%v\n	%v",
-					in,
-					out,
+					*in,
+					*out,
 					err,
 				),
 			)

@@ -19,12 +19,13 @@ func oldScalarMult(
 	scalar,
 	base *[X25519Size]byte,
 ) error {
-	err := OldScalarMultGeneric(
+	var err error
+	OldScalarMultGeneric(
 		dst,
 		scalar,
 		base,
 	)
-	if err != nil {
+	/*	if err != nil {
 		return fmt.Errorf(
 			"\ngoc25519sm.oldScalarMult.OldScalarMultGeneric FAILURE:\n	dst=%v\n	scalar=%v\n	base=%v\n	%v",
 			dst,
@@ -32,7 +33,7 @@ func oldScalarMult(
 			base,
 			err,
 		)
-	}
+	} */ // Intended for future use
 	err = oldScalarMultVerify(
 		dst,
 		scalar,
@@ -41,9 +42,9 @@ func oldScalarMult(
 	if err != nil {
 		return fmt.Errorf(
 			"\ngoc25519sm.oldScalarMult.OldScalarMultGeneric.oldScalarMultVerify FAILURE:\n	dst=%v\n	scalar=%v\n	base=%v\n	%v",
-			dst,
-			scalar,
-			base,
+			*dst,
+			*scalar,
+			*base,
 			err,
 		)
 	}
