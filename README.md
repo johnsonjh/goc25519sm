@@ -43,6 +43,10 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 
 * [Gridfinity GitLab Issues](https://gitlab.gridfinity.com/jeff/goc25519sm/-/issues)
 
+## Security Policy
+
+* [Security Policy and Vulnerability Reporting](https://github.com/johnsonjh/goc25519sm/blob/master/SECURITY.md)
+
 ## Documentation
 
 * [GoDocs](https://pkg.go.dev/github.com/johnsonjh/goc25519sm)
