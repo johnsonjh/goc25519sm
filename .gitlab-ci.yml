@@ -38,6 +38,12 @@ default:
     go tool dist env -p
 .scriptGitPre: &scriptGitPre | 
     # scriptGitPre
+    git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+    git --no-pager fetch --tags
+    git --no-pager fetch --all --recurse-submodules=yes
+    git --no-pager branch -t --create-reflog --show-current
+    git --no-pager update-index -q --refresh --really-refresh
+    git --no-pager for-each-ref --count=1
     git --no-pager reset --hard
     git --no-pager diff --full-index --ignore-cr-at-eol --exit-code
 ###################### End Common Blocks
@@ -62,6 +68,7 @@ windows job:
     - | 
         # status
         echo "Build completed successfully - running tests; coverage and race detector enabled"
+        echo "TODO: Port of 'cov_report.sh' to PowerShell"
     - $env:CGO_ENABLED="1"
     - go test -v -cover -covermode="atomic" -race -tags="osnetgo,osusergo,leaktest,purego" -count="1" -cpu="1" -bench="." -parallel="1" .\...
 ###################### End Windows Build + Test
@@ -80,7 +87,7 @@ linux job:
     - dnf upgrade --refresh -y || true :;
     - dnf groupinstall "Development Tools" -y || true :;
     - dnf install epel-release centos-release-scl centos-release-scl-rh -y || true :;
-    - dnf install rpmconf scl-utils devtoolset-9 -y || true :;
+    - dnf install zsh rpmconf scl-utils devtoolset-9 -y || true :;
     - yes | rpmconf -a || true :;
     - . /opt/rh/devtoolset-9/enable
     - dnf clean all -y || true :;
@@ -97,10 +104,11 @@ linux job:
     - go mod download
     - go mod verify
     - *scriptGitPre
-    - CGO_ENABLED=0 go build -v -a -tags="osnetgo,osusergo" -trimpath -buildid= ./...
+    - CGO_ENABLED=0 go build -v -a -tags="osnetgo,osusergo" -trimpath -buildid= $(go list ./... | grep -v test | sort | uniq)
     - | 
         # status
         echo "Build completed successfully - running tests; coverage and race detector enabled"
+        echo "TODO: Use 'cov_report.sh'"
     - CGO_ENABLED=1 go test -v -cover -covermode=atomic -race -tags="osnetgo,osusergo,leaktest,purego" -count=1 -cpu=1 -bench=. -parallel=1 $(go list ./... | grep -v test | sort | uniq)
 ###################### End Linux Build + Test
 
@@ -124,9 +132,10 @@ macos job:
     - go mod download
     - go mod verify
     - *scriptGitPre
-    - CGO_ENABLED=0 go build -v -a -tags="osnetgo,osusergo" -trimpath -buildid= ./...
+    - CGO_ENABLED=0 go build -v -a -tags="osnetgo,osusergo" -trimpath -buildid= $(go list ./... | grep -v test | sort | uniq)
     - | 
         # status
         echo "Build completed successfully - running tests; coverage and race detector enabled"
+        echo "TODO: Use 'cov_report.sh'"
     - CGO_ENABLED=1 go test -v -cover -covermode=atomic -race -tags="osnetgo,osusergo,leaktest,purego" -count=1 -cpu=1 -bench=. -parallel=1 $(go list ./... | grep -v test | sort | uniq)
 ###################### End macOS Build + Test
