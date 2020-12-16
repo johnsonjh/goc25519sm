@@ -79,5 +79,5 @@ OpenSSL Project for use in the OpenSSL Toolkit
 
 All rights reserved.
 
-Please review "LICENSE" for all Terms and Conditions.
+Please see the "LICENSE" for full Terms and Conditions.
 ```
