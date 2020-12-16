@@ -61,6 +61,7 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 ## License
 
 * [BSD 3-Clause License (Revised)](https://tldrlegal.com/license/bsd-3-clause-license-(revised))
+* [![FOSSASmallStatus](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjohnsonjh%2Fgoc25519sm.svg?type=large)](https://app.fossa.com/reports/64562da2-2df4-4566-8120-2200ca634465)
 
 ```text
 Copyright 2020 Jeffrey H. Johnson.
@@ -80,5 +81,3 @@ All rights reserved.
 
 Please review "LICENSE" for all Terms and Conditions.
 ```
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjohnsonjh%2Fgoc25519sm.svg?type=large)](https://app.fossa.com/reports/64562da2-2df4-4566-8120-2200ca634465)
