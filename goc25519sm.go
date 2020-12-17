@@ -12,32 +12,37 @@
 // implementations of 'ScalarBaseMult' and 'ScalarMult' provided in Google's
 // "x/crypto/curve25519" library.
 //
-// These functions, named 'OldScalarBaseMult' and 'OldScalarMult', provide for
-// additional error checking with input and output validation, intended to
-// provide equivalence and full compatibility with the implementation found
-// in libsodium. These functions implement an API which is compatible with the
-// original Go "x/crypto/curve25519" functions, but with the addition of
-// returning errors, and are intended to provide an alternative to the X25519
-// function, future-proofed against possible changes to X25519. The goal is
-// a "safer" library for certain specific classes of software, such as
-// distributed consensus systems, which may be sensitive to behavior changes.
+// These functions, named 'OldScalarBaseMult' and 'OldScalarMult', provide
+// for additional error checking with input and output validation, intended
+// to provide equivalence and full compatibility with the implementation
+// found in libsodium. These functions implement an API which is compatible
+// with the original Go "x/crypto/curve25519" functions, but with the
+// addition of returning errors, and are intended to provide an alternative
+// to the X25519 function, future-proofed against possible changes to X25519.
+// The goal is a "safer" library for certain specific classes of software,
+// such as distributed consensus systems, which may be sensitive to behavior
+// changes.
 //
 // While these functions provide an API that is mostly backwards-compatible
-// with the original ScalarMult and ScalarBaseMult, the added validation checks
-// introduce the possibility that unchecked errors may result in additional and
-// unintended cases of apparent zero or null output when processing malformed
-// inputs, when compared to the original functions. However, these extra checks
-// provide parity with the libsodium implementation. For this reason, it is very
-// important that the return value is always checked for errors by the caller.
+// with the original ScalarMult and ScalarBaseMult, the added validation
+// checks introduce the possibility that unchecked errors may result in
+// additional and unintended cases of apparent zero or null output when
+// processing malformed inputs, when compared to the original functions.
+// However, these extra checks provide parity with the libsodium
+// implementation. For this reason, it is very important that the return
+// value is always checked for errors by the caller.
 //
 // While not specific to this implementation, it should also be noted that
 // users must be aware of the implications of copying into fixed size arrays,
-// such as the possibility of truncation via unintended short copies, and must
-// ensure the correctness of any code which makes use of these functions.
+// such as the possibility of truncation via unintended short copies, and
+// must ensure the correctness of any code which makes use of these
+// functions.
 //
 // Users of this library should familiar with the nuances of working with
-// Curve25519. Please review RFC-7748, RFC-8422, and https://cr.yp.to/ecdh.html
-// for further details. It must also be acknowledged that verification and
+// Curve25519. Please review RFC-7748, RFC-8422, and
+// https://cr.yp.to/ecdh.html.
+//
+// For further details. It must also be acknowledged that verification and
 // validation checks, as performed by this and other libraries, such as
 // libsodium, are extremely controversial. For background, please review
 // https://research.kudelskisecurity.com/2017/04/25/should-ecdh-keys-be-validated/,
@@ -52,34 +57,36 @@ package goc25519sm
 // panic by default, rather than returning any error. Users could change the
 // behavior from panic to errors by taking some explicit action, such as
 // calling a function for this specific purpose. While this could make this
-// library "drop-in compatible" with the original, at least in regards to weak
-// key generation. The trade-off is that any unchecked errors, or errors in
-// implementation, such as the passing of truncated scalar or point inputs, or
-// providing low-order inputs to these functions, results in changing possible
-// "silent" security issues (depending on the protocol implementation), into
-// application crashes. While it is debatable if crashing is actually worse
-// than continuing with possible security vulnerabilities, a panic-by-default
-// behavior would at least ensure that these errors do not slip by undetected.
-// STATUS: Planned for a future release.
+// library "drop-in compatible" with the original, at least in regards to
+// weak key generation. The trade-off is that any unchecked errors, or errors
+// in implementation, such as the passing of truncated scalar or point
+// inputs, or providing low-order inputs to these functions, results in
+// changing possible "silent" security issues (depending on the protocol
+// implementation), into application crashes. While it is debatable if
+// crashing is actually worse than continuing with possible security
+// vulnerabilities, a panic-by-default behavior would at least ensure that
+// these errors do not slip by undetected.
+// STATUS: In-progress.
 
-// TODO(jhj): (2) OldScalarMult and OldScalarBaseMult should be constrained to
-// strictly operate in constant time, even in the case of validation failures.
-// This could be achieved by requiring oldScalarMultVerify, which already does
-// constant time validation, to always perform all possible checks before
-// returning, which may protect against certain types of implementation errors.
-// STATUS: Planned for the next major release.
+// TODO(jhj): (2) OldScalarMult and OldScalarBaseMult should be constrained
+// to strictly operate in constant time, even in the case of validation
+// failures. This could be achieved by requiring oldScalarMultVerify, which
+// already does constant time validation, to always perform all possible
+// checks before returning, which may protect against certain types of
+// implementation errors.
+// STATUS: In-progress.
 
-// TODO(jhj): (3) Validation checks are performed several times, much of which
-// could be avoided with the use of https://github.com/awnumar/memguard, which
-// implements mitigations in areas of concern. Most of these mitigations are
+// TODO(jhj): (3) Validation checks are performed several times, much of
+// which could be avoided with the use of https://github.com/awnumar/memguard
+// to add mitigations in areas of concern. Most of these mitigations are
 // inspired by those which are currently implemented in libsodium.
-// STATUS: Investigating.
+// STATUS: In-progress.
 
 import (
 	csubtle "crypto/subtle"
 	"fmt"
 
-	golegal "go4.org/legal"
+	goc25519smLegal "go4.org/legal"
 )
 
 const (
@@ -125,7 +132,7 @@ func OldScalarMult(
 			*point,
 			err,
 		)
-	} */
+	} */ // Indented for future use
 	return nil
 }
 
@@ -170,7 +177,7 @@ func oldScalarMultVerify(
 	}
 	// Check for Basepoint molestation when using the standard
 	// canonical Curve25519 generator, determined via a constant
-	// time check, with mitigations against compiler optimizations.
+	// time check with mitigations against compiler optimizations
 	ctPoint := point[:]
 	ctBasepoint := Basepoint[:]
 	/* var err error */ // Intended for future use
@@ -200,8 +207,8 @@ func oldScalarMultVerify(
 			)
 		} */ // Intended for future use
 	}
-	// Detect for low-order inputs by checking output
-	// See RFC-8422 S:5.11 for more information
+	// Detect low-order inputs by checking output
+	// See RFC-8422 Sec 5.11 for more information
 	var allZeroOutput [X25519Size]byte
 	ctDst := dst[:]
 	if csubtle.ConstantTimeCompare(
@@ -217,9 +224,9 @@ func oldScalarMultVerify(
 }
 
 // OldScalarVerifyBasepoint verifies that the global Basepoint, which
-// defines the standard canonical Curve25519 generator, has not been molested.
-// It is automatically called as part of the validation checks, but has been
-// exported as it might be useful to others.
+// defines the standard canonical Curve25519 generator, has not been
+// molested. It is automatically called as part of the validation checks,
+// but has been exported as it might be useful to others.
 func OldScalarVerifyBasepoint(
 	Basepoint [X25519Size]byte,
 ) error {
@@ -272,7 +279,7 @@ var (
 	}
 )
 
-// blocklist from https://eprint.iacr.org/2017/806.pdf
+// See https://eprint.iacr.org/2017/806.pdf
 var blocklist = [][X25519Size]byte{
 	{
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -379,7 +386,7 @@ func checkBlocklist(
 // init initializes the goc25519sm package
 func init() {
 	// Register licensing
-	golegal.RegisterLicense(
+	goc25519smLegal.RegisterLicense(
 		"\nCopyright 2020 Jeffrey H. Johnson.\nCopyright 2020 Gridfinity, LLC.\nCopyright 2020 Frank Denis <j at pureftpd dot org>.\nCopyright 2020 Filippo Valsorda.\nCopyright 2019 The Go Authors.\nCopyright 2015 Google, Inc.\nCopyright 2011 The OpenSSL Project.\nCopyright 1998 Eric Young (eay@cryptsoft.com).\n\nThis product includes software developed by the OpenSSL Project\nfor use in the OpenSSL Toolkit (http://www.openssl.org/).\n\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions are\nmet:\n\n   * Redistributions of source code must retain the above copyright\nnotice, this list of conditions and the following disclaimer.\n\n   * Redistributions in binary form must reproduce the above\ncopyright notice, this list of conditions and the following disclaimer\nin the documentation and/or other materials provided with the\ndistribution.\n\n   * Neither the name of Google, Inc. nor the names of its\ncontributors may be used to endorse or promote products derived from\nthis software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\nLIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR\nA PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT\nOWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\nSPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT\nLIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\nDATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\nTHEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\nOF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n",
 	)
 }
