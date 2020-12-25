@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"testing"
 
-	u "github.com/johnsonjh/goc25519sm/testutil"
+	u "go.gridfinity.dev/leaktestfe"
 )
 
 func TestLeakVerifyNoneDisabled(
