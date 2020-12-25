@@ -13,32 +13,32 @@ import (
 	u "go.gridfinity.dev/leaktestfe"
 )
 
-func TestLeakVerifyNoneDisabled(
+func TestLeakplugDisabled(
 	t *testing.T,
 ) {
-	err := u.LeakVerifyNone(
+	err := u.Leakplug(
 		t,
 	)
 	if err != nil {
 		t.Fatal(
 			fmt.Sprintf(
-				"\ngoc25519sm_testutil_test.TestLeakVerifyNoneDisabled.LeakVerifyNone FAILURE:\n	%v",
+				"\ngoc25519sm_testutil_test.TestLeakplugDisabled.Leakplug FAILURE:\n	%v",
 				err,
 			),
 		)
 	}
 }
 
-func TestLeakVerifyNoneEnabled(
+func TestLeakplugEnabled(
 	t *testing.T,
 ) {
-	err := u.LeakVerifyNone(
+	err := u.Leakplug(
 		t,
 	)
 	if err != nil {
 		t.Fatal(
 			fmt.Sprintf(
-				"\ngoc25519sm_testutil_test.TestLeakVerifyNoneEnabled.LeakVerifyNone FAILURE:\n	%v",
+				"\ngoc25519sm_testutil_test.TestLeakplugEnabled.Leakplug FAILURE:\n	%v",
 				err,
 			),
 		)
