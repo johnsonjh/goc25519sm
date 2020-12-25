@@ -1,12 +1,9 @@
 version = 1
-
 [[analyzers]]
 name = "go"
 enabled = true
-
   [analyzers.meta]
-  import_paths = ["github.com/johnsonjh/goc25519sm"]
-
+  import_paths = ["github.com/gridfinity/goc25519sm"]
 [[transformers]]
 name = "gofmt"
 enabled = true
