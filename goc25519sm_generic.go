@@ -5,7 +5,7 @@
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-package goc25519sm
+package goc25519sm // import "go.gridfinity.dev/goc25519sm"
 
 // This code is a port of the public domain, "ref10" implementation of
 // Curve25519 from SUPERCOP 20130419 by D. J. Bernstein.

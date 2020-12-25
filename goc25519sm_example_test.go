@@ -6,12 +6,12 @@
 // license that can be found in the LICENSE file.
 
 // Package goc25519sm_test provides tests for the goc25519sm library.
-package goc25519sm_test // import oc25519sm "github.com/johnsonjh/goc25519sm"
+package goc25519sm_test
 
 import (
 	"fmt"
 
-	goc25519sm "github.com/johnsonjh/goc25519sm"
+	goc25519sm "go.gridfinity.dev/goc25519sm"
 )
 
 // OldScalarMult sets 'dst' to the product of ('scalar' * 'point'), where

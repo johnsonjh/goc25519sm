@@ -6,14 +6,14 @@
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-package goc25519sm
+package goc25519sm // import "go.gridfinity.dev/goc25519sm"
 
 import (
 	"fmt"
 	"os"
 	"testing"
 
-	u "github.com/johnsonjh/goc25519sm/testutil"
+	u "go.gridfinity.dev/leaktestfe"
 )
 
 func TestMain(m *testing.M) {
@@ -27,7 +27,7 @@ func TestMain(m *testing.M) {
 func TestOldScalarMultVerifyFailure(
 	t *testing.T,
 ) {
-	defer u.LeakVerifyNone(
+	defer u.Leakplug(
 		t,
 	)
 	var dst, scalar, point [X25519Size]byte
@@ -51,7 +51,7 @@ func TestOldScalarMultVerifyFailure(
 func TestOldScalarMultVerifyLowFailure(
 	t *testing.T,
 ) {
-	defer u.LeakVerifyNone(
+	defer u.Leakplug(
 		t,
 	)
 	var dst, scalar, point [X25519Size]byte
@@ -74,7 +74,7 @@ func TestOldScalarMultVerifyLowFailure(
 func TestInitCorruptBasepointTestFailure(
 	t *testing.T,
 ) {
-	defer u.LeakVerifyNone(
+	defer u.Leakplug(
 		t,
 	)
 	if !CorruptBasepointTest {

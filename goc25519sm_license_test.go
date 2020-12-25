@@ -5,20 +5,20 @@
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-package goc25519sm
+package goc25519sm // import "go.gridfinity.dev/goc25519sm"
 
 import (
 	"fmt"
 	"testing"
 
-	u "github.com/johnsonjh/goc25519sm/testutil"
+	u "go.gridfinity.dev/leaktestfe"
 	licn "go4.org/legal"
 )
 
 func TestLicense(
 	t *testing.T,
 ) {
-	defer u.LeakVerifyNone(
+	defer u.Leakplug(
 		t,
 	)
 	licenses := licn.Licenses()

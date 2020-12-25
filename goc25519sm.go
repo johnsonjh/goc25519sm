@@ -50,7 +50,7 @@
 // https://vnhacker.blogspot.com/2016/08/the-internet-of-broken-protocols.html,
 // https://vnhacker.blogspot.com/2015/09/why-not-validating-curve25519-public.html,
 // and https://moderncrypto.org/mail-archive/noise/2017/000971.html.
-package goc25519sm
+package goc25519sm // import "go.gridfinity.dev/goc25519sm"
 
 // TODO(jhj): (1) An possible enhancement which could avoid any possible
 // ramifications of callers not checking for error conditions would be to

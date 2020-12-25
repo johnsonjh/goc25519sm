@@ -6,20 +6,20 @@
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-package goc25519sm
+package goc25519sm // import "go.gridfinity.dev/goc25519sm"
 
 import (
 	crand "crypto/rand"
 	"fmt"
 	"testing"
 
-	u "github.com/johnsonjh/goc25519sm/testutil"
+	u "go.gridfinity.dev/leaktestfe"
 )
 
 func TestBlocklistPoint(
 	t *testing.T,
 ) {
-	defer u.LeakVerifyNone(
+	defer u.Leakplug(
 		t,
 	)
 	var x [X25519Size]byte
@@ -66,7 +66,7 @@ func TestBlocklistPoint(
 func TestBlocklistScalar(
 	t *testing.T,
 ) {
-	defer u.LeakVerifyNone(
+	defer u.Leakplug(
 		t,
 	)
 	var p [X25519Size]byte
