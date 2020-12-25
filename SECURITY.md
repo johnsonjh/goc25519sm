@@ -4,7 +4,7 @@
 
 * Only the most recent current release is ***SUPPORTED***.**☨**
 
-    [![GitHubRelease](https://img.shields.io/github/release/johnsonjh/goc25519sm.svg)](https://github.com/johnsonjh/goc25519sm/releases/)
+    [![GitHubRelease](https://img.shields.io/github/release/gridfinity/goc25519sm.svg)](https://github.com/gridfinity/goc25519sm/releases/)
 
 * **☨** Support is offered on a **best-effort** basis **ONLY**.
 
@@ -26,7 +26,7 @@
 
 ## Report a security vulnerability
 
-* Create a new issue at [Gridfinity GitLab](https://gitlab.gridfinity.com/jeff/goc25519sm/-/issues)
+* Create a new issue at [Gridfinity GitLab](https://gitlab.gridfinity.com/gridfinity/goc25519sm/-/issues)
   * Check "*This issue is confidential and should only be visible to team members with at least Reporter access.*"
 
   * Or, send a **PGP-encrypted** email to <mailto:jeff@gridfinity.com>
