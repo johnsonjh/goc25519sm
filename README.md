@@ -5,7 +5,7 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://github.com/gridfinity/goc25519sm/blob/master/LICENSE)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgridfinty%2Fgoc25519sm.svg?type=shield)](https://app.fossa.com/reports/64562da2-2df4-4566-8120-2200ca634465)
 [![GoVersion](https://img.shields.io/github/go-mod/go-version/gridfinity/goc25519sm.svg)](https://github.com/gridfinity/goc25519sm/blob/master/go.mod)
-[![PkgGoDev](https://pkg.go.dev/badge/github.com/gridfinity/goc25519sm)](https://pkg.go.dev/github.com/johnsonjh/goc25519sm)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/gridfinity/goc25519sm)](https://pkg.go.dev/github.com/gridfinity/goc25519sm)
 [![GoReportCard](https://goreportcard.com/badge/github.com/gridfinity/goc25519sm)](https://goreportcard.com/report/github.com/gridfinity/goc25519sm)
 [![GitHubRelease](https://img.shields.io/github/release/gridfinity/goc25519sm.svg)](https://github.com/gridfinity/goc25519sm/releases/)
 [![LocCount](https://img.shields.io/tokei/lines/github/gridfinity/goc25519sm.svg)](https://github.com/XAMPPRocky/tokei)
