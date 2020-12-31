@@ -13,7 +13,7 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 [![GitHubCodeSize](https://img.shields.io/github/languages/code-size/gridfinty/goc25519sm.svg)](https://github.com/gridfinity/goc25519sm)
 [![CoverageStatus](https://coveralls.io/repos/github/gridfinty/goc25519sm/badge.svg?branch=master)](https://coveralls.io/github/gridfinty/goc25519sm?branch=master)
 [![CodacyBadge](https://api.codacy.com/project/badge/Grade/1554a9e30cff45aa80635c1e00dafa9e)](https://app.codacy.com/gh/gridfinty/goc25519sm?utm_source=github.com&utm_medium=referral&utm_content=gridfinty/goc25519sm&utm_campaign=Badge_Grade)
-[![LgtmAlerts](https://img.shields.io/lgtm/alerts/g/gridfinty/goc25519sm.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/gridfinty/goc25519sm/alerts/)
+[![LgtmAlerts](https://img.shields.io/lgtm/alerts/g/gridfinity/goc25519sm.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/gridfinity/goc25519sm/alerts/)
 [![CodeBeat](https://codebeat.co/badges/95866deb-d1d0-4fe9-a6ac-807f8442c400)](https://codebeat.co/projects/github-com-gridfinty-goc25519sm-master)
 [![CodeclimateMaintainability](https://api.codeclimate.com/v1/badges/bbc4379b8c69ca2693e6/maintainability)](https://codeclimate.com/github/gridfinty/goc25519sm/maintainability)
 [![TickgitTODOs](https://img.shields.io/endpoint?url=https://api.tickgit.com/badge?repo=github.com/gridfinity/goc25519sm)](https://www.tickgit.com/browse?repo=github.com/gridfinity/goc25519sm)
