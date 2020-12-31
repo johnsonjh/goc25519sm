@@ -62,7 +62,7 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 ## License
 
 - [BSD 3-Clause License (Revised)](<https://tldrlegal.com/license/bsd-3-clause-license-(revised)>)
-- [![FOSSASmallStatus](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgridfinty%2Fgoc25519sm.svg?type=large)](https://app.fossa.com/reports/64562da2-2df4-4566-8120-2200ca634465)
+- [![FOSSASmallStatus](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgridfinity%2Fgoc25519sm.svg?type=small)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgridfinity%2Fgoc25519sm?ref=badge_small)
 
 ```text
 Copyright 2020 Jeffrey H. Johnson.
