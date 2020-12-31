@@ -8,7 +8,6 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/gridfinity/goc25519sm)](https://pkg.go.dev/github.com/johnsonjh/goc25519sm)
 [![GoReportCard](https://goreportcard.com/badge/github.com/gridfinity/goc25519sm)](https://goreportcard.com/report/github.com/gridfinity/goc25519sm)
 [![GitHubRelease](https://img.shields.io/github/release/gridfinity/goc25519sm.svg)](https://github.com/gridfinity/goc25519sm/releases/)
-[![GitHubTag](https://img.shields.io/github/tag/gridfinity/goc25519sm.svg)](https://github.com/gridfinity/goc25519sm/tags/)
 [![LocCount](https://img.shields.io/tokei/lines/github/gridfinity/goc25519sm.svg)](https://github.com/XAMPPRocky/tokei)
 [![GitHubCodeSize](https://img.shields.io/github/languages/code-size/gridfinity/goc25519sm.svg)](https://github.com/gridfinity/goc25519sm)
 [![CoverageStatus](https://coveralls.io/repos/github/gridfinity/goc25519sm/badge.svg?branch=master)](https://coveralls.io/github/gridfinty/goc25519sm?branch=master)
