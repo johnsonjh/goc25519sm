@@ -2,11 +2,11 @@
 
 ## Supported releases
 
-* Only the most recent current release is ***SUPPORTED***.**☨**
+- Only the most recent current release is **_SUPPORTED_**.**☨**
 
-    [![GitHubRelease](https://img.shields.io/github/release/gridfinity/goc25519sm.svg)](https://github.com/gridfinity/goc25519sm/releases/)
+  [![GitHubRelease](https://img.shields.io/github/release/gridfinity/goc25519sm.svg)](https://github.com/gridfinity/goc25519sm/releases/)
 
-* **☨** Support is offered on a **best-effort** basis **ONLY**.
+- **☨** Support is offered on a **best-effort** basis **ONLY**.
 
 ```text
       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -22,14 +22,15 @@
       OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
 
-* Pre-release versions and past releases are ***NOT SUPPORTED***.
+- Pre-release versions and past releases are **_NOT SUPPORTED_**.
 
 ## Report a security vulnerability
 
-* Create a new issue at [Gridfinity GitLab](https://gitlab.gridfinity.com/gridfinity/goc25519sm/-/issues)
-  * Check "*This issue is confidential and should only be visible to team members with at least Reporter access.*"
+- Create a new issue at [Gridfinity GitLab](https://gitlab.gridfinity.com/gridfinity/goc25519sm/-/issues)
 
-  * Or, send a **PGP-encrypted** email to <mailto:jeff@gridfinity.com>
+  - Check "_This issue is confidential and should only be visible to team members with at least Reporter access._"
+
+  - Or, send a **PGP-encrypted** email to <mailto:jeff@gridfinity.com>
 
 ```text
 -----BEGIN PGP PUBLIC KEY BLOCK-----
