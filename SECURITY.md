@@ -26,9 +26,11 @@
 
 ## Report a security vulnerability
 
-- Create a new issue at [Gridfinity GitLab](https://gitlab.gridfinity.com/gridfinity/goc25519sm/-/issues)
+- Create a new issue at
+  [Gridfinity GitLab](https://gitlab.gridfinity.com/gridfinity/goc25519sm/-/issues)
 
-  - Check "_This issue is confidential and should only be visible to team members with at least Reporter access._"
+  - Check "_This issue is confidential and should only be visible to team
+    members with at least Reporter access._"
 
   - Or, send a **PGP-encrypted** email to <mailto:jeff@gridfinity.com>
 
