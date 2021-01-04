@@ -1,4 +1,4 @@
-// Copyright 2020 Filippo Valsorda.
+// Copyright 2021 Filippo Valsorda.
 // Copyright 2012 The Go Authors.
 // All rights reserved.
 // Use of this source code is governed by the BSD-style
