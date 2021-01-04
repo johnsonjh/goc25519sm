@@ -65,10 +65,10 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 - [![FOSSASmallStatus](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgridfinity%2Fgoc25519sm.svg?type=small)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgridfinity%2Fgoc25519sm?ref=badge_small)
 
 ```text
-Copyright 2020 Jeffrey H. Johnson.
-Copyright 2020 Gridfinity, LLC.
+Copyright 2021 Jeffrey H. Johnson.
+Copyright 2021 Gridfinity, LLC.
 Copyright 2020 Frank Denis <j at pureftpd dot org>.
-Copyright 2020 Filippo Valsorda.
+Copyright 2021 Filippo Valsorda.
 Copyright 2019 The Go Authors.
 Copyright 2015 Google, Inc.
 Copyright 2011 The OpenSSL Project.

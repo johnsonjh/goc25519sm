@@ -1,5 +1,5 @@
-// Copyright 2020 Jeffrey H. Johnson.
-// Copyright 2020 Gridfinity, LLC.
+// Copyright 2021 Jeffrey H. Johnson.
+// Copyright 2021 Gridfinity, LLC.
 // Copyright 2013 The Go Authors.
 // All rights reserved.
 // Use of this source code is governed by the BSD-style
@@ -14,6 +14,7 @@ package goc25519sm // import "go.gridfinity.dev/goc25519sm"
 // An element t, entries t[0]...t[9], represents the integer
 // t[0]+2^26 t[1]+2^51 t[2]+2^77 t[3]+2^102 t[4]+...+2^230 t[9].
 // Bounds on each t[i] vary depending on context.
+
 type fieldElement [10]int32
 
 var zero fieldElement
