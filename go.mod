@@ -3,8 +3,7 @@ module go.gridfinity.dev/goc25519sm
 go 1.14
 
 require (
-	go.gridfinity.dev/leaktestfe v0.0.0-20210124163903-de8b953a7f31
+	go.gridfinity.dev/leaktestfe v0.0.0-20210214173048-0c6aeab8cbb4
 	go.uber.org/goleak v1.1.11-0.20200902203756-89d54f0adef2 // indirect
 	go4.org v0.0.0-20201209231011-d4a079459e60
-	golang.org/x/mod v0.4.1 // indirect
 )
