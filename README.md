@@ -34,7 +34,6 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 ### Source Code (Development Repositories)
 
 - [Gridfinity GitLab](https://gitlab.gridfinity.com/jeff/goc25519sm)
-- [SourceHut Git](https://git.sr.ht/~trn/goc25519sm)
 - [GitHub](https://github.com/gridfinity/goc25519sm)
 
 ## Community
@@ -64,3 +63,4 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 
 - [BSD 3-Clause License (Revised)](<https://tldrlegal.com/license/bsd-3-clause-license-(revised)>)
 - [![FOSSASmallStatus](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgridfinity%2Fgoc25519sm.svg?type=small)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgridfinity%2Fgoc25519sm?ref=badge_small)
+

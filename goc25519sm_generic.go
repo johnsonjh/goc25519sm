@@ -1,7 +1,7 @@
-// Copyright 2021 Jeffrey H. Johnson.
 // Copyright 2021 Gridfinity, LLC.
 // Copyright 2013 The Go Authors.
 // All rights reserved.
+//
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
@@ -298,9 +298,9 @@ func feToBytes(
 //    |h| bounded by 1.1*2^25,1.1*2^24,1.1*2^25,1.1*2^24,etc.
 // Notes on implementation strategy:
 // * Using schoolbook multiplication.
-// * Karatsuba would save a little in some cost models.
+// * Karatsuba **would** save a little - in some cost models.
 // * Most multiplications by 2 and 19 are 32-bit precomputations;
-//   cheaper than 64-bit postcomputations.
+//   these are explictly cheaper than 64-bit postcomputations.
 // * There is one remaining multiplication by 19 in the carry chain;
 //   one *19 precomputation can be merged into this, but the resulting
 //   data flow is considerably less clean.
@@ -887,8 +887,8 @@ func OldScalarMultGeneric(
 	point *[X25519Size]byte,
 ) error {
 	var e [X25519Size]byte
-	// Dubious to perform clamp at this stage,
-	// but behavior matches that of libsodium
+	// Dubious to perform clamping at this stage,
+	// *but*, behavior matches that of libsodium
 	copy(
 		e[:],
 		scalar[:],

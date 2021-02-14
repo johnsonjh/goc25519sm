@@ -1,4 +1,3 @@
-// Copyright 2021 Jeffrey H. Johnson.
 // Copyright 2021 Gridfinity, LLC.
 // Copyright 2011 The OpenSSL Project.
 // Copyright 1998 Eric Young (eay@cryptsoft.com).

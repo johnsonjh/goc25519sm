@@ -1,5 +1,4 @@
 // Copyright 2021 Gridfinity, LLC.
-// Copyright 2021 Jeffrey H. Johnson.
 // Copyright 2019 The Go Authors.
 //
 // All rights reserved.
