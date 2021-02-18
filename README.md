@@ -38,7 +38,6 @@ A Go package for validated and consensus-safe Curve25519 scalar multiplication
 
 ## Community
 
-- [goc25519sm-announce mailing list](https://lists.sr.ht/~trn/goc25519sm-announce)
 - [PKT.Chat #goc25519sm](https://pkt.chat/pkt/channels/goc25519sm)
 
 ## Issue Tracking
