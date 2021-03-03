@@ -1,3 +1,4 @@
+// Copyright 2021 Jeffrey H. Johnson <trnsz@pobox.com>.
 // Copyright 2021 Gridfinity, LLC.
 // Copyright 2020 Frank Denis <j at pureftpd dot org>.
 // Copyright 2012 The Go Authors.
@@ -15,8 +16,8 @@ import (
 	"fmt"
 	"testing"
 
-	goc25519sm "go.gridfinity.dev/goc25519sm"
-	u "go.gridfinity.dev/leaktestfe"
+	goc25519sm "github.com/johnsonjh/goc25519sm"
+	u "github.com/johnsonjh/leaktestfe"
 )
 
 const (

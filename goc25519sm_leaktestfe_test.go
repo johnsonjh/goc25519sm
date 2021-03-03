@@ -1,3 +1,4 @@
+// Copyright 2021 Jeffrey H. Johnson <trnsz@pobox.com>
 // Copyright 2021 Gridfinity, LLC.
 // Copyright 2019 The Go Authors.
 //
@@ -11,7 +12,7 @@ package goc25519sm_test
 import (
 	"testing"
 
-	u "go.gridfinity.dev/leaktestfe"
+	u "github.com/johnsonjh/leaktestfe"
 )
 
 func TestLeakplugDisabled(

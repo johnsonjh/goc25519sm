@@ -1,5 +1,6 @@
-// Copyright 2021 Gridfinity, LLC.
-// Copyright 2019 The Go Authors.
+// Copyright © 2021 Jeffrey H. Johnson <trnsz@pobox.com>
+// Copyright © 2021 Gridfinity, LLC.
+// Copyright © 2019 The Go Authors.
 //
 // All rights reserved.
 //
@@ -12,7 +13,7 @@ package goc25519sm_test
 import (
 	"fmt"
 
-	goc25519sm "go.gridfinity.dev/goc25519sm"
+	goc25519sm "github.com/johnsonjh/goc25519sm"
 )
 
 // OldScalarMult sets 'dst' to the product of ('scalar' * 'point'), where
