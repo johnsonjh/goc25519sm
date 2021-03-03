@@ -9,7 +9,7 @@
 
 // +build !amd64 !gc purego
 
-package goc25519sm // import "go.gridfinity.dev/goc25519sm"
+package goc25519sm
 
 import (
 	"fmt"
