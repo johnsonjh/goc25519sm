@@ -1,3 +1,4 @@
+// Copyright 2021 Jeffrey H. Johnson <trnsz@pobox.com>.
 // Copyright 2021 Gridfinity, LLC.
 // Copyright 2020 Frank Denis <j at pureftpd dot org>.
 // Copyright 2012 The Go Authors.
@@ -7,14 +8,14 @@
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-package goc25519sm // import "go.gridfinity.dev/goc25519sm"
+package goc25519sm
 
 import (
 	"fmt"
 	"os"
 	"testing"
 
-	u "go.gridfinity.dev/leaktestfe"
+	u "github.com/johnsonjh/leaktestfe"
 )
 
 func TestMain(m *testing.M) {

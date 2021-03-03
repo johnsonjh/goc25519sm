@@ -1,6 +1,7 @@
-// Copyright 2021 Gridfinity, LLC.
-// Copyright 2021 Filippo Valsorda.
-// Copyright 2012 The Go Authors.
+// Copyright © 2021 Jeffrey H. Johnson <trnsz@pobox.com>.
+// Copyright © 2021 Gridfinity, LLC.
+// Copyright © 2021 Filippo Valsorda.
+// Copyright © 2012 The Go Authors.
 //
 // All rights reserved.
 //
@@ -9,7 +10,7 @@
 //
 // +build amd64,gc,!purego
 
-package goc25519sm // import "go.gridfinity.dev/goc25519sm"
+package goc25519sm
 
 import (
 	"fmt"

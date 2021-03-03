@@ -1,11 +1,12 @@
-// Copyright 2021 Gridfinity, LLC.
-// Copyright 2013 The Go Authors.
+// Copyright © 2021 Jeffrey H. Johnson <trnsz@pobox.com>.
+// Copyright © 2021 Gridfinity, LLC.
+// Copyright © 2013 The Go Authors.
 // All rights reserved.
 //
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 
-package goc25519sm // import "go.gridfinity.dev/goc25519sm"
+package goc25519sm // import "github.com/johnsonjh/goc25519sm"
 
 // This code is a port of the public domain, "ref10" implementation of
 // Curve25519 from SUPERCOP 20130419 by D. J. Bernstein.
