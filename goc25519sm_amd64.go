@@ -8,6 +8,7 @@
 // Use of this source code is governed by the BSD-style
 // license that can be found in the LICENSE file.
 //
+//go:build amd64 && gc && !purego
 // +build amd64,gc,!purego
 
 package goc25519sm
