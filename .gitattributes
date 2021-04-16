@@ -1,1 +1,2 @@
 Makefile linguist-vendored
+cov_report.sh linguist-vendored
