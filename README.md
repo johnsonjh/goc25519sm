@@ -2,7 +2,6 @@
 
 [![GRC](https://goreportcard.com/badge/github.com/johnsonjh/goc25519sm)](https://goreportcard.com/badge/github.com/johnsonjh/goc25519sm)
 
-
 ---
 
 A Go package for validated and consensus-safe Curve25519 scalar multiplication.
