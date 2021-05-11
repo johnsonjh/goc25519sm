@@ -114,7 +114,7 @@ func OldScalarMult(
 	)
 	if err != nil {
 		return fmt.Errorf(
-			"\ngoc25519sm.OldScalarMult.oldScalarMult FAILURE:\n	dst=%v\n	scalar=%v\n	point=%v\n	%v",
+			"\ngoc25519sm.OldScalarMult.oldScalarMult FAILURE:\n\tdst=%v\n\tscalar=%v\n\tpoint=%v\n\t%w",
 			*dst,
 			*scalar,
 			*point,
