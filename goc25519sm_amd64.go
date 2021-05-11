@@ -140,7 +140,7 @@ func oldScalarMult(
 	)
 	if err != nil {
 		return fmt.Errorf(
-			"\ngoc25519sm.oldScalarMult.OldScalarMult_amd64.oldScalarMultVerify FAILURE:\n	dst=%v\n	scalar=%v\n	base=%v\n	%v",
+			"\ngoc25519sm.oldScalarMult.OldScalarMult_amd64.oldScalarMultVerify FAILURE:\n\tdst=%v\n\tscalar=%v\n\tbase=%v\n\t%w",
 			*dst,
 			*scalar,
 			*base,
